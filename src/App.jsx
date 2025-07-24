@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import './App.css'
 import ServiceSelector from './components/ServiceSelector'
+import CalendarPicker from './components/CalendarPicker'
 
 function App() {
   const [selectedService, setSelectedService] = useState(null)
 
   return (
-    
+   <>
  <div>
      {!selectedService ? (
        <ServiceSelector onSelect={setSelectedService} />
@@ -19,6 +20,8 @@ function App() {
       </div>
      )}
  </div>
+ <CalendarPicker onDateSelect={(date) => console.log("Fecha elegida",date)} />
+</>
   )
 }
 
