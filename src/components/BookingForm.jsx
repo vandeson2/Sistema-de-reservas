@@ -9,7 +9,7 @@ const validationSchema = Yup.object({
         .required('El teléfono es obligatorio'),
 });
 
-export default function BookingForm({selectedService, selectedDate, selectedTime, onFormSubmit}){
+export default function BookingForm({selectedService, selectedDate, selectedTime, onSubmit}){
     const formik = useFormik({
         initialValues: {
             fullName: '',
@@ -24,7 +24,7 @@ export default function BookingForm({selectedService, selectedDate, selectedTime
             date: selectedDate,
             time: selectedTime
         };
-        onFormSubmit(bookingData);// Enviar los datos al componente padre
+        onSubmit(bookingData);// Enviar los datos al componente padre
     },
     });
 

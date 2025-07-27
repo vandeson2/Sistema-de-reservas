@@ -10,6 +10,7 @@ export default function CalendarPicker({onDateSelect}){
         onDateSelect(date); //envia la fecha seleccionada al componente padre
     };
 
+
     return(
         <div className="p-4 bg-hite shadow rounded-lg">
             <h2 className="text-xl font-semibold mb-4 text-center">
@@ -28,13 +29,10 @@ export default function CalendarPicker({onDateSelect}){
                 <p className="mt-4 text-center text-green-700 font-medium">
                     Has seleccionado: {" "}
                     <span className="font-semibold">
-                        {selectedDate.toLocaleDateString("es-ES", {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric"
-                        })}
-                    </span>
+                            {selectedDate.getDate().toString().padStart(2, '0')}/
+                            {(selectedDate.getMonth() + 1).toString().padStart(2, '0')}/
+                            {selectedDate.getFullYear()}
+                   </span>
                 </p>
             )}
 

@@ -10,7 +10,7 @@ const services = [
     {id: 7, name: 'CrossFit'},
 ]
 
-export default function serviceSelector({onSelect}){
+export default function ServiceSelector({onSelect}){
     return(
         <div className="p-4">
             <h2 className="text-xl font-semibold mb-4 text-center">
