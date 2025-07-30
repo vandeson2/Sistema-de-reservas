@@ -1,5 +1,5 @@
+import { useBookingStore } from "../../store/bookingStore"; 
 import { useState, useEffect } from "react";
-
 // Lista de horarios disponibles
 const defaultTimeSlot = [
     '08:00',
@@ -16,20 +16,24 @@ const defaultTimeSlot = [
     '21:00',
 ];
 
-export default function TimeSelector({selectedDate, onTimeSelect}){
-    const [selectedTime, setSelectedTime] = useState(null);
+export default function TimeSelector(){
+    const selectedDate = useBookingStore((state) => state.selectedDate);
+    const selectedTime = useBookingStore((state) => state.selectedTime);
+    const setSelectedTime = useBookingStore((state) => state.setSelectedTime);
+
     const [availableTimes, setAvailableTimes] = useState([]);
+    
 
     useEffect(() => {
         if (selectedDate) {
             setAvailableTimes(defaultTimeSlot);
             setSelectedTime(null);
         }
-    }, [selectedDate]);
+    }, [selectedDate, setSelectedTime]);
 
     const handleTimeClick = (time) =>{
         setSelectedTime(time); //marca,mos como seleccionado
-        onTimeSelect(time); // Enviar la hora seleccionada al componente padre
+
     }
 
     return (

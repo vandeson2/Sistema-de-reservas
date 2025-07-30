@@ -1,4 +1,4 @@
-import React from "react";
+import {useBookingStore} from "../../store/bookingStore"
 
 const services = [
     {id: 1, name: 'Body Pump'},
@@ -10,7 +10,8 @@ const services = [
     {id: 7, name: 'CrossFit'},
 ]
 
-export default function ServiceSelector({onSelect}){
+export default function ServiceSelector(){
+    const setSelectedService = useBookingStore ((state) => state.setSelectedService);
     return(
         <div className="p-4">
             <h2 className="text-xl font-semibold mb-4 text-center">
@@ -20,7 +21,7 @@ export default function ServiceSelector({onSelect}){
                 {services.map((service) => (
                     <button
                         key={service.id}
-                        onClick={() => onSelect(service)}
+                        onClick={() => setSelectedService(service)}
                         className="bg-white shadow rounded-lg p-4 text-left hover:bg-green-100 transition"
                     >
                         <h3 className="text-lg font-bold">{service.name}</h3>

@@ -1,13 +1,13 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Estilos del calendario
-import  { useState } from "react";
+import  {useBookingStore} from "../../store/bookingStore"
 
-export default function CalendarPicker({onDateSelect}){
-    const [selectedDate, setSelectedDate] =  useState(null);
+export default function CalendarPicker(){
+    const selectedDate = useBookingStore((state) => state.selectedDate);
+    const setSelectedDate = useBookingStore((state) => state.setSelectedDate);
 
     const handleDateChange = (date) => {
         setSelectedDate(date); //guarda la fecha en el estado
-        onDateSelect(date); //envia la fecha seleccionada al componente padre
     };
 
 

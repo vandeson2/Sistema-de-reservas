@@ -1,57 +1,26 @@
-import { useState } from 'react'
-import './App.css'
-import ServiceSelector from './components/ServiceSelector'
-import CalendarPicker from './components/CalendarPicker'
-import TimeSelector from './components/TimeSelector'
-import BookingForm from './components/BookingForm'
-import ConfirmationModal from './components/ConfirmationModal'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Home from "./pages/user/Home"
+import BookingPage from "./pages/user/BookingPage"
+import Login from "./pages/admin/login"
+import AdminDashboard from "./pages/admin/AdminDashboad"
+
 
 function App() {
-  const [service, setService] = useState(null)
-  const [date, setDate] = useState(null);
-  const [time, setTime] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState(null);
-
   return (
-   <div>
-      <div>
-        <h1>Reserva tu sesión en Estudio Vatalis</h1>
+    <Router>
+      <Routes>
+        {/* Rutas públicas "usuarios" */}
+        <Route path="/" element={<Home />} />
+        <Route path="/reservas" element={<BookingPage />} /> 
 
-        <ServiceSelector onSelect={setService} selectedService={service} />
+        {/* Ruta de login */}
+        <Route path="/login" element={<Login />} />
 
-        {service && (
-          <CalendarPicker onDateSelect={setDate} />
-        )}
-
-        {date && (
-          <TimeSelector selectedDate={date} onTimeSelect={setTime} />
-        )}
-
-        {time  && (
-          <BookingForm onSubmit={(data) => {
-            setFormData({
-              ...data,
-              service,
-              date,
-              time
-            });
-            setShowModal(true);
-          }} />
-        )}
-      </div>
-
-      {formData && showModal && (
-        <ConfirmationModal
-          bookingData={formData}
-          onConfirm={(data) => {
-            console.log('Reserva confirmada:', data);
-            setShowModal(false);
-          }}
-          onCancel={() => setShowModal(false)}
-        />  
-      )}
-   </div>
+        {/* Ruta para administrador */}
+        <Route path="/admin" element={<AdminDashboard />} />
+    
+      </Routes>
+    </Router>
   )
 };
 

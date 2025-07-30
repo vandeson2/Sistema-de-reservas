@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useBookingStore } from "../../store/bookingStore";
 
 const validationSchema = Yup.object({
     fullName: Yup.string().required("El nombre es obligatorio"),
@@ -9,7 +10,14 @@ const validationSchema = Yup.object({
         .required('El teléfono es obligatorio'),
 });
 
-export default function BookingForm({selectedService, selectedDate, selectedTime, onSubmit}){
+export default function BookingForm(){
+    const selectedService = useBookingStore ((state) => state.selectedService);
+    const selectedDate = useBookingStore ((state) => state.selectedDate);
+    const selectedTime = useBookingStore ((state) => state.selectedTime);
+    const setBookingData = useBookingStore ((state) => state.setBookingData);
+    const toggleConfirmation = useBookingStore((state) => state.toggleConfirmation);
+
+
     const formik = useFormik({
         initialValues: {
             fullName: '',
@@ -24,7 +32,8 @@ export default function BookingForm({selectedService, selectedDate, selectedTime
             date: selectedDate,
             time: selectedTime
         };
-        onSubmit(bookingData);// Enviar los datos al componente padre
+        setBookingData(bookingData);
+        toggleConfirmation(true)
     },
     });
 
