@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAFvAVb0lAPX-boeUhO9PNW_SVALPueNog",
+  apiKey: "ApiKey", // desabilitado
   authDomain: "reservas-5ccf8.firebaseapp.com",
   projectId: "reservas-5ccf8",
   storageBucket: "reservas-5ccf8.firebasestorage.app",
