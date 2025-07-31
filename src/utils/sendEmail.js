@@ -22,10 +22,10 @@ export const sendConfirmationEmail = async (bookingData) => {
 
     try {
         const response = await emailjs.send(
-            "service_qsjj9b4", //service ID
-            "template_rxk76hl", //template ID
+            import.meta.env.VITE_EMAILJS_SERVICE_ID, //service IDA
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID, //template ID
             templateParams,
-            "PGHCuOPYVPNx09HYi" //user Id
+            import.meta.env.VITE_EMAILJS_USER_ID //user Id
 
         );
         console.log('Email sent successfully:', response);
