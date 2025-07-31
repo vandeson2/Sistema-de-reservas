@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllBookings, deleteBookingById } from "../../services/firebase"
 import ReservationList from "../../components/admin/ReservationList"
+import { logout } from "../../firebase/auth";
 
 const AdminDashboard = () => {
     const [bookings, setBookings] = useState([]);
@@ -37,6 +38,9 @@ const AdminDashboard = () => {
     return (
         <div>
             <h1>Panel de Administración</h1>
+            <button onClick={logout}>
+                Cerrar sesión
+            </button>
 
             {loading ? (
                 <p>Cargando reservas...</p>

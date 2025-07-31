@@ -13,16 +13,16 @@ export const AuthProvider = ({children}) => {
 
     // Efecto para escuchar cambios en el estado de autenticación
    useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, currentUser => {
-        setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser);
         setLoading(false);
     })
     return () => unsubscribe(); // Limpia el listener al desmontar el componente
    }, []);
 
    return (
-    <AuthContext.Provider value={{ user}}>
-        {!loading && children} 
+    <AuthContext.Provider value={{ user, loading}}>
+        {children} 
     </AuthContext.Provider>
    )
 }
