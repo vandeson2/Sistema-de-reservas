@@ -28,7 +28,7 @@ const ReservationList = ({ bookingData, onDelete}) => {
                         <tr key={resultado.id}>
                             <td>{resultado.fullName}</td>
                             <td>{resultado.email}</td>
-                            <td>{resultado.service.name}</td>
+                            <td>{resultado.serviceId}</td>
                             <td>{formtDate(resultado.date)}</td>
                             <td>{resultado.time}</td>
                             <td>

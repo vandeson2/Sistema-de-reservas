@@ -2,7 +2,7 @@ import { useState } from "react";
 import { sendConfirmationEmail } from "../../utils/sendEmail";
 import {saveReservation} from "../../utils/saveReservation"
 import { useBookingStore } from "../../store/bookingStore";
-
+import { getBookingsForDateAndService } from "../../services/firebase";
 
 export default function ConfirmationModal({onConfirm, onCancel}){
     const [confirmed, setConfirmed] = useState(false);
@@ -27,6 +27,43 @@ export default function ConfirmationModal({onConfirm, onCancel}){
         return date;
     }
 
+    const handleReservation = async () => {
+        try{
+            console.log("Verificando disponibilidad...");
+
+            const existingBookings = await getBookingsForDateAndService(
+                bookingData.date,
+                bookingData.service.id
+            );
+
+            const bookingsForThisTime = existingBookings.filter(
+                (b) => b.time === bookingData.time
+            );
+
+            if (bookingsForThisTime.length >= 2) {
+                alert("Este horario ya está completo. Por favor elige otro.");
+                return;
+            }
+
+            console.log("Enviando email...");
+            await sendConfirmationEmail(bookingData);
+
+            console.log("Guardando reserva...");
+            await saveReservation(bookingData);
+
+            console.log("Confirmando reserva...");
+            handleConfirm();
+            alert("Reserva confirmada y correo enviado");
+        }catch (error) {
+        console.error("Error al enviar el email o guardar reserva:", error);
+        alert(
+            `No se pudo completar la reserva. Error: ${
+            error?.message || JSON.stringify(error)
+            }`
+        );
+        }
+    }
+
     return (
         <div>
             <div>
@@ -47,20 +84,8 @@ export default function ConfirmationModal({onConfirm, onCancel}){
                         </button>
 
                         <button
-                            onClick={async () => {
-                                try {
-                                    console.log("Enviando email...")
-                                    await sendConfirmationEmail(bookingData);
-                                    console.log("Email enviado, guardando reserva")
-                                    await saveReservation(bookingData);
-                                    console.log("Reserva guardada, confirmando...")
-                                    handleConfirm();
-                                    alert('Reserva confirmada y correo enviado')
-                                } catch (error) {
-                                    console.error("Error al enviar el email o guardar:", error)
-                                    alert(`No se puedo enviar el correo. Error: ${error?.message || JSON.stringfy(error)}`);
-                                }
-                            }}>
+                            onClick={handleReservation}
+                        >
                             Confirmar reserva
                         </button> 
                     </div>

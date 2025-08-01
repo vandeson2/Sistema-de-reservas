@@ -21,7 +21,15 @@ const BookingPage = () =>{
 
             <ServiceSelector />
             {selectedService?.name && <CalendarPicker />}
-            {selectedService?.name && selectedDate && <TimeSelector /> }
+            {selectedService?.name && selectedDate ? (
+                [0,6].includes(new Date(selectedDate).getDay()) ? (
+                    <p>No hay horarios disponibles los fines de semana.</p>
+            ):(
+                <TimeSelector/> 
+            )
+            ):(
+                <p>Selecciona una fecha para ver los horarios</p>
+            )}
             {selectedService?.name && selectedDate && selectedTime && <BookingForm />}
 
             {showConfirmation && 
