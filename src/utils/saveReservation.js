@@ -9,14 +9,17 @@ export  const saveReservation = async (bookingData) =>{
       ? bookingData.date.toISOString().split("T")[0]
       : bookingData.date;
 
-    //Extraer serviceId
-    const serviceId = bookingData.service?.id;
+  
 
     //  Crear datos limpios para guardar
     const cleanData = {
-      ...bookingData,
+      fullName: bookingData.fullName,
+      email: bookingData.email,
+      phone: bookingData.phone,
       date: formattedDate,
-      serviceId, 
+      time: bookingData.time,
+      serviceId: bookingData.service?.id,
+      serviceName:bookingData.service?.name,
     };
 
     const docRef = await addDoc(collection(db, "reservas"), cleanData);

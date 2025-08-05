@@ -9,6 +9,7 @@ export const getAllBookings = async () => {
     }));
 };
 
+//Eliminar reservas
 export const deleteBookingById = async (id) =>{
     const docRef = doc(db, "reservas", id);
     await deleteDoc(docRef);

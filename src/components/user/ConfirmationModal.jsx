@@ -40,7 +40,8 @@ export default function ConfirmationModal({onConfirm, onCancel}){
                 (b) => b.time === bookingData.time
             );
 
-            if (bookingsForThisTime.length >= 2) {
+            
+            if (bookingsForThisTime.length >= bookingData.service?.capacity) {
                 alert("Este horario ya está completo. Por favor elige otro.");
                 return;
             }
@@ -54,6 +55,11 @@ export default function ConfirmationModal({onConfirm, onCancel}){
             console.log("Confirmando reserva...");
             handleConfirm();
             alert("Reserva confirmada y correo enviado");
+
+            //Recarga la página
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         }catch (error) {
         console.error("Error al enviar el email o guardar reserva:", error);
         alert(

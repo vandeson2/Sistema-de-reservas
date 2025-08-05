@@ -21,8 +21,6 @@ const defaultTimeSlot = [
     '21:00',
 ];
 
-const maxReservationsPerSlot = 2;
-
 export default function TimeSelector(){
     const selectedDate = useBookingStore((state) => state.selectedDate);
     const selectedTime = useBookingStore((state) => state.selectedTime);
@@ -49,7 +47,7 @@ export default function TimeSelector(){
         });
 
         // 3. Filtrar horas disponibles (máx. 2 reservas por hora)
-        const filtered = defaultTimeSlot.filter((time) => (timeCount[time] || 0) < 2);
+        const filtered = defaultTimeSlot.filter((time) => (timeCount[time] || 0) < selectedService?.capacity);
         
         setAvailableTimes(filtered);
         setSelectedTime(null); // Reiniciar selección

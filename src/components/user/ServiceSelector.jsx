@@ -1,17 +1,28 @@
+import { getServices } from "../../services/service";
 import {useBookingStore} from "../../store/bookingStore"
+import { useState, useEffect } from "react";
 
-const services = [
-    {id: 1, name: 'Body Pump'},
-    {id: 2, name: 'HIIT'},
-    {id: 3, name: 'Yoga'},
-    {id: 4, name: 'Pilates'},
-    {id: 5, name: 'Spinning'},
-    {id: 6, name: 'Zumba'}, 
-    {id: 7, name: 'CrossFit'},
-]
 
 export default function ServiceSelector(){
     const setSelectedService = useBookingStore ((state) => state.setSelectedService);
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect (() => {
+        const fetch = async () => {
+            try {
+               const data = await getServices();
+               setServices(data);
+            }catch (error){
+                console.log("Error al cargar servicios", error);
+            }finally{
+                setLoading(false);
+            }
+        };
+        fetch();
+    }, []);
+
+    if (loading) return <p>Cargando servicios ...</p>
     return(
         <div className="p-4">
             <h2 className="text-xl font-semibold mb-4 text-center">
@@ -21,6 +32,7 @@ export default function ServiceSelector(){
                 {services.map((service) => (
                     <button
                         key={service.id}
+                        value={service.id}
                         onClick={() => setSelectedService(service)}
                         className="bg-white shadow rounded-lg p-4 text-left hover:bg-green-100 transition"
                     >

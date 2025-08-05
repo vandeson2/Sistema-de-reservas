@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { getAllBookings, deleteBookingById } from "../../services/firebase"
 import ReservationList from "../../components/admin/ReservationList"
 import { logout } from "../../firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     //Cargar reservas 
     const loadingBooking = async () => {
@@ -41,6 +44,11 @@ const AdminDashboard = () => {
             <button onClick={logout}>
                 Cerrar sesión
             </button>
+
+             <button onClick={() => navigate("/admin/capacity")}>
+                    Cambiar capacidad
+             </button>
+          
 
             {loading ? (
                 <p>Cargando reservas...</p>

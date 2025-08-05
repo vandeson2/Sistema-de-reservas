@@ -2,6 +2,7 @@ import { Routes, Route} from 'react-router-dom'
 import AdminHome from '../pages/admin/AdminHome'
 import Reservations from '../pages/admin/Reservations'
 import PrivateRoute from '../components/PrivateRoute'
+import ServiceCapacityManager from '../pages/admin/ServiceCapacityManager'
 
 const AdminHome = () => (
     <Routes>
@@ -18,7 +19,9 @@ const AdminHome = () => (
                     <Reservations />
                 </PrivateRoute>
             }
-        />        
+        />  
+        
     </Routes>
+  
 );
 export default AdminHome;

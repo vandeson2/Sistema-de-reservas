@@ -1,7 +1,6 @@
 
 const ReservationList = ({ bookingData, onDelete}) => {
-
-    const formtDate = (timestamp) =>{
+    const formatDate = (timestamp) =>{
         if (timestamp?.seconds){
             return new Date(timestamp.seconds * 1000).toLocaleDateString();
         }
@@ -28,11 +27,11 @@ const ReservationList = ({ bookingData, onDelete}) => {
                         <tr key={resultado.id}>
                             <td>{resultado.fullName}</td>
                             <td>{resultado.email}</td>
-                            <td>{resultado.serviceId}</td>
-                            <td>{formtDate(resultado.date)}</td>
+                            <td>{resultado.serviceName || "Sin nombre"}</td>
+                            <td>{formatDate(resultado.date)}</td>
                             <td>{resultado.time}</td>
                             <td>
-                                <button
+                            <button
                                     onClick={() => onDelete(resultado.id)}
                                 >
                                     Cancelar
