@@ -6,6 +6,7 @@ export const useBookingStore = create((set) => ({
      selectedTime: null,
      bookingData: null,
      showConfirmation: false,
+     searchTerm: "",
 
      //Métodos para actualizar
      setSelectedService: (service) => set({selectedService: service}),
@@ -13,6 +14,7 @@ export const useBookingStore = create((set) => ({
      setSelectedTime: (time) => set ({selectedTime: time}),
      setBookingData: (bookingData) => set({bookingData}),
      toggleConfirmation: (value) => set({ showConfirmation: value}),
+     setSearchTerm: (term) => set({searchTerm: term}),
 
      resetBooking: () => 
         set({
