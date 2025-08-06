@@ -1,5 +1,6 @@
+
 import { db }  from "../firebase/config";
-import { collection, getDocs, getDoc, doc, updateDoc, addDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc } from "firebase/firestore";
 
 
 //Obtener todos los servicios
@@ -26,6 +27,11 @@ export const createService = async ({name, capacity}) => {
     return { id: docRef.id, name, capacity };
 };
 
+//Eliminar servicio por id
+export const deleteServiceById = async (id) => {
+    await deleteDoc(doc(db, "services", id));
+};
+
 //Obtener un servicio por id
 export const getServiceById = async (id) => {
     const docRef = doc(db, "services", id);
@@ -39,7 +45,6 @@ export const getServiceById = async (id) => {
 
 // Actualizar la capacidad del servicio
 export const updateServiceCapacity = async (id, newCapacity) => {
-    console.log("updateServiceCapacity id:", id, "typeof id:", typeof id);
     const docRef = doc(db, "services", id.toString());
     await updateDoc(docRef, {capacity: newCapacity});
 }

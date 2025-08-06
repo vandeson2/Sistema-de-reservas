@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createService, getServices, updateServiceCapacity} from"../services/service"
+import { createService, getServices, updateServiceCapacity, deleteServiceById} from"../services/service"
 
 export const useServiceStore = create((set) => ({
     services: [],
@@ -20,5 +20,15 @@ export const useServiceStore = create((set) => ({
     addService: async (service) => {
         const newService = await createService(service);
         set ((state) => ({services: [...state.services, newService]}));
+    },
+    deleteService:  async (id)  => {
+        try{
+            await deleteServiceById(id);
+            set ((state) => ({
+                services: state.services.filter((s) => s.id !== id), 
+            }));
+        }catch (error) {
+            console.log("Error al eliminar el servicio:",  error)
+        }
     },
 }));

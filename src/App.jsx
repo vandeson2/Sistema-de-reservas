@@ -5,8 +5,8 @@ import Login from "./pages/admin/login"
 import AdminDashboard from "./pages/admin/AdminDashboad"
 import PrivateRoute from "./components/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext"
-import ServiceCapacityManager from "./components/admin/ServiceCapacityManager"
 import NewServiceForm from "./components/admin/NewServiceForm"
+import ServiceDashboard from "./pages/admin/ServiceDashboard"
 
 
 function App() {
@@ -31,10 +31,10 @@ function App() {
               }
           /> 
           <Route 
-          path="/admin/capacity"
+          path="/admin/service"
             element={
                 <PrivateRoute>
-                    <ServiceCapacityManager />
+                    <ServiceDashboard />
                 </ PrivateRoute>    
             }
         /> 

@@ -69,7 +69,7 @@ export default function NewServiceForm() {
                             </button>
                             <button
                             type="button"
-                                 onClick={() => navigate("/admin")}>
+                                 onClick={() => navigate("/admin/service")}>
                                 Volver
                             </button>
                         </div>
