@@ -45,8 +45,15 @@ const AdminDashboard = () => {
                 Cerrar sesión
             </button>
 
+            <button onClick={() => navigate("/admin/newService")}>
+                    Añadir nuevo servicio
+            </button>
+
              <button onClick={() => navigate("/admin/capacity")}>
                     Cambiar capacidad
+             </button>
+             <button onClick={() => window.location.reload(false)}>
+                Actualizar
              </button>
           
 

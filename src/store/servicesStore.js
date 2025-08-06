@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getServices, updateServiceCapacity} from"../services/service"
+import { createService, getServices, updateServiceCapacity} from"../services/service"
 
 export const useServiceStore = create((set) => ({
     services: [],
@@ -16,5 +16,9 @@ export const useServiceStore = create((set) => ({
             services: state.services.map((s) =>
             s.id === id? {...s, capacity:newCapacity} : s),
         }));
+    },
+    addService: async (service) => {
+        const newService = await createService(service);
+        set ((state) => ({services: [...state.services, newService]}));
     },
 }));

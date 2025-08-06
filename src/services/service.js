@@ -1,5 +1,5 @@
 import { db }  from "../firebase/config";
-import { collection, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, updateDoc, addDoc } from "firebase/firestore";
 
 
 //Obtener todos los servicios
@@ -18,6 +18,12 @@ export const  getServices = async () => {
      console.error("Error obteniendo servicios:", error);
     return [];
 }
+};
+
+//Agregar nuevos servicios
+export const createService = async ({name, capacity}) => {
+    const docRef = await addDoc(collection(db, "services"), {name, capacity});
+    return { id: docRef.id, name, capacity };
 };
 
 //Obtener un servicio por id
