@@ -1,8 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebase/auth";
+import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore"
+import firebase from "firebase/compat/app";
 
-const AuthContext = createContext(); // Crea contexto de autenticación
+export const AuthContext = createContext(); // Crea contexto de autenticación
 
 export const useAuth = () =>useContext(AuthContext); // Hook para acceder al contexto de autenticación
 
@@ -13,10 +15,31 @@ export const AuthProvider = ({children}) => {
 
     // Efecto para escuchar cambios en el estado de autenticación
    useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        setUser(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+            //obtener el rol desde firestore
+            const docRef = doc(db, "users", firebaseUser.uid);
+            const docSnap = await getDoc(docRef);
+            let role = "user";
+            if(docSnap.exists()){
+                role = (docSnap.data().role || "user").toLowerCase().trim();
+            }
+
+            const currentUser = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                displayName: firebaseUser.displayName,
+                role,
+            };
+            
+            console.log("Usuario autenticado:", currentUser);
+            setUser(currentUser);
+        }else {
+            setUser(null);
+        }
         setLoading(false);
-    })
+    });
+    
     return () => unsubscribe(); // Limpia el listener al desmontar el componente
    }, []);
 

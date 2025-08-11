@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllBookings, deleteBookingById } from "../../services/firebase"
 import ReservationList from "../../components/admin/ReservationList"
-import { logout } from "../../firebase/auth";
+import { logout } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "../../components/admin/SearchInput";
 import { useBookingStore } from "../../store/bookingStore";
@@ -63,6 +63,9 @@ const AdminDashboard = () => {
             </button>
              <button onClick={() => navigate("/admin/service")}>
                     Servicios
+             </button>
+             <button onClick={() => navigate("/admin/userManagement")}>  
+                Gestión de Usuarios
              </button>
              <button onClick={() => window.location.reload(false)}>
                 Actualizar
