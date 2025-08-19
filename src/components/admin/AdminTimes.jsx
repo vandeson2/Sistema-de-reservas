@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBookingStore } from "../../store/bookingStore";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminTimes () {
     const { 
@@ -10,6 +11,7 @@ export default function AdminTimes () {
         updateServiceTimes,
     } = useBookingStore();
     const [newSchedules, setNewSchedules] = useState("");
+    const navigate = useNavigate();
 
     // Cargar servicios al montar el componente
     useEffect(() => {
@@ -37,6 +39,9 @@ export default function AdminTimes () {
     return (
         <div>
             <h2>Gestión de Horarios</h2>
+
+            <button onClick={() => navigate("/admin")}>Volver al Panel</button>
+            <button onClick={() => navigate("/admin/service")}>Volver a Servicios</button>
 
             <select
                 value={selectedService?.id || ""}

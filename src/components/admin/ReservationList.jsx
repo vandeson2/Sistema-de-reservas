@@ -1,10 +1,16 @@
 
 const ReservationList = ({ bookingData, onDelete}) => {
     const formatDate = (timestamp) =>{
-        if (timestamp?.seconds){
-            return new Date(timestamp.seconds * 1000).toLocaleDateString();
-        }
-        return timestamp;
+            let dateObj;
+            if (timestamp?.seconds) {
+                dateObj = new Date(timestamp.seconds * 1000);
+            } else {
+                dateObj = new Date(timestamp);
+            }
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const year = dateObj.getFullYear();
+            return `${day}/${month}/${year}`;
     }
 
     return (

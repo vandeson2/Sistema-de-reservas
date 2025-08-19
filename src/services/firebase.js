@@ -29,3 +29,20 @@ export const getBookingsForDateAndService = async (date, serviceId) =>{
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => doc.data());
 };
+
+// Consulta de reservas por email
+export const getBookingsByEmail = async (email) => {
+    try {
+        const q = query(
+            collection(db, "reservas"),
+            where("email", "==", email)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map((doc) => ({
+            id: doc.id, ...doc.data(),
+        }));
+    }catch (error) {
+        console.error("Error al obtener reservas por email:", error);
+        throw error;
+    }
+}

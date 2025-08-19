@@ -6,12 +6,13 @@ import AdminDashboard from "./pages/admin/AdminDashboad"
 import PrivateRoute from "./components/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext"
 import NewServiceForm from "./components/admin/NewServiceForm"
-import ServiceDashboard from "./pages/admin/ServiceDashboard"
+import ServiceDashboard from "./components/admin/ServiceDashboard"
 import Login from "./pages/login"
 import UserManagement from "./components/admin/UserManagement"
 import useAuthStore from "./store/authStore"
 import { useEffect } from "react"
 import AdminTimes from "./components/admin/AdminTimes"
+import MyReservation from "./components/user/MyReservation"
 
 function App() {
    const initAuth = useAuthStore(state => state.initAuth);
@@ -26,6 +27,8 @@ function App() {
         <Routes>
           {/* Rutas públicas "usuarios" */}
           <Route path="/" element={<Login/>} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/my-reservation" element={<MyReservation />} />
           <Route path="/reservas" element={<BookingPage />} /> 
 
           {/* Ruta para administrador (solo es accesible si hay sesión iniciada)*/}

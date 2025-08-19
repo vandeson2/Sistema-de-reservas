@@ -1,6 +1,7 @@
-import {Link} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+export default function Home(){
+    const navigate = useNavigate();
     return (
         <div>
             <h1>Bienvenido a Estudios Vitalis</h1>
@@ -8,10 +9,12 @@ const Home = () => {
                 Conecta con tu bienestar a través del yoga, el masaje terapéutico y la energía del reiki.
                 Reserva tu sesión fácilmente desde aquí.
             </p>
-            <Link to="/reservas">
-                <button>Reservar ahora</button>
-            </Link>
+            <button onClick={() => navigate("/reservas")}>
+                Reservar ahora
+            </button>
+            <button onClick={() => navigate("/my-reservation")}>
+                Mis Reservas
+            </button>    
         </div>
     );
 };
-export default Home;
