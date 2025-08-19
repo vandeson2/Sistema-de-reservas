@@ -11,7 +11,7 @@ import Login from "./pages/login"
 import UserManagement from "./components/admin/UserManagement"
 import useAuthStore from "./store/authStore"
 import { useEffect } from "react"
-
+import AdminTimes from "./components/admin/AdminTimes"
 
 function App() {
    const initAuth = useAuthStore(state => state.initAuth);
@@ -59,6 +59,14 @@ function App() {
             element={
               <PrivateRoute allowedRoles={["admin"]}>
                 <UserManagement />
+              </PrivateRoute>
+            }
+        />
+        <Route
+          path="/admin/times"
+            element={
+              <PrivateRoute allowedRoles={["admin"]}>
+                <AdminTimes />
               </PrivateRoute>
             }
         />

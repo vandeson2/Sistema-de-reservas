@@ -55,6 +55,7 @@ const  ServcieDashboard = () => {
 
            <button onClick={() => navigate("/admin")}>Volvel al Panel</button>
            <button onClick={() => navigate("/admin/newService")}>Crear nuevo servicio</button>
+           <button onClick={() => navigate("/admin/times")}>Gestionar horarios</button>
 
            {loading ? (
             <p>Cargando servicios...</p>

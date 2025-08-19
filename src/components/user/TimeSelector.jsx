@@ -5,22 +5,6 @@ import {getBookingsForDateAndService} from "../../services/firebase";
 
 
 
-// Lista de horarios disponibles
-const defaultTimeSlot = [
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-];
-
 export default function TimeSelector(){
     const selectedDate = useBookingStore((state) => state.selectedDate);
     const selectedTime = useBookingStore((state) => state.selectedTime);
@@ -36,24 +20,27 @@ export default function TimeSelector(){
       if (!selectedDate || !selectedService) return;
 
       try {
-        // 1. Obtener reservas para esa fecha y servicio
+        //Obtener reservas para esa fecha y servicio
         const bookings = await getBookingsForDateAndService(selectedDate, selectedService.id);
 
-        // 2. Contar reservas por hora
+        //Contar reservas por hora
         const timeCount = {};
         bookings.forEach((booking) => {
             const hours = booking.time;
           timeCount[hours] = (timeCount[hours] || 0) + 1;
         });
 
-        // 3. Filtrar horas disponibles (máx. 2 reservas por hora)
-        const filtered = defaultTimeSlot.filter((time) => (timeCount[time] || 0) < selectedService?.capacity);
+        //horarios de servicios desde firestore
+        const serviceTimes = selectedService.schedules || [];
+
+        //Filtrar horas disponibles (máx. 2 reservas por hora)
+        const filtered = serviceTimes.filter((time) => (timeCount[time] || 0) < selectedService?.capacity);
         
         setAvailableTimes(filtered);
         setSelectedTime(null); // Reiniciar selección
       } catch (error) {
         console.error("Error al cargar reservas:", error);
-        setAvailableTimes(defaultTimeSlot); // Fallback
+        setAvailableTimes(selectedService.schedules || []); // Fallback
       }
       setLoading(false)
     };
@@ -74,7 +61,7 @@ export default function TimeSelector(){
         <div className="my-4">
       <h3 className="text-lg font-semibold mb-2">Selecciona una hora:</h3>
       <div className="grid grid-cols-4 gap-3">
-        {defaultTimeSlot.map((time) => {
+        {selectedService.schedules?.map((time) => {
           const isDisabled = !availableTimes.includes(time);
           const isSelected = selectedTime === time;
 
