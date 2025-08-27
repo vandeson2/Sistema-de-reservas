@@ -58,9 +58,9 @@ export default function TimeSelector(){
 
 
     return (
-        <div className="my-4">
+      <div className="my-4">
       <h3 className="text-lg font-semibold mb-2">Selecciona una hora:</h3>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-2">
         {selectedService.schedules?.map((time) => {
           const isDisabled = !availableTimes.includes(time);
           const isSelected = selectedTime === time;

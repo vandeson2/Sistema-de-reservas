@@ -40,6 +40,7 @@ export default function BookingForm(){
     return (
         <form 
             onSubmit={formik.handleSubmit}
+            className="flex flex-col gap-2 p-2 w-full"
         >
             <h2>
                 Tus datos para la reserva

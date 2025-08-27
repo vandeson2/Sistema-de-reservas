@@ -13,21 +13,22 @@ export default function CalendarPicker(){
 
 
     return(
-        <div className="p-4 bg-hite shadow rounded-lg">
+        <div className="flex flex-col items-center gap-4 p-2 w-full">
             <h2 className="text-xl font-semibold mb-4 text-center">
                 Selecciona una fecha
             </h2>
-            <div className="flex justify-center">
+            <div className="">
                 <Calendar
                     onChange={handleDateChange}
                     value={selectedDate}
                     minDate={new Date()} // No se puede seleccionar fechas pasadas
                     locale="es-ES"
+                    className="w-full"
                 />
             </div>
 
             {selectedDate && (
-                <p className="mt-4 text-center text-green-700 font-medium">
+                <p className="">
                     Has seleccionado: {" "}
                     <span className="font-semibold">
                             {selectedDate.getDate().toString().padStart(2, '0')}/

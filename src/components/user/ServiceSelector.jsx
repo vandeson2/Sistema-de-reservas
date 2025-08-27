@@ -24,22 +24,24 @@ export default function ServiceSelector(){
 
     if (loading) return <p>Cargando servicios ...</p>
     return(
-        <div className="p-4">
+        <div className="flex flex-col justify-center gap-2 p-2 w-full">
             <h2 className="text-xl font-semibold mb-4 text-center">
                 ¿Qué servicio deseas reservar?
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {services.map((service) => (
-                    <button
-                        key={service.id}
-                        value={service.id}
-                        onClick={() => setSelectedService(service)}
-                        className="bg-white shadow rounded-lg p-4 text-left hover:bg-green-100 transition"
-                    >
-                        <h3 className="text-lg font-bold">{service.name}</h3>
-                    </button>
-                ))}
-            </div>
+            <div className="flex justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {services.map((service) => (
+                        <button
+                            key={service.id}
+                            value={service.id}
+                            onClick={() => setSelectedService(service)}
+                            className="bg-white shadow rounded-lg p-2 hover:bg-green-100 transition"
+                        >
+                            <h3 className="text-lg font-bold text-center">{service.name}</h3>
+                        </button>
+                    ))}
+                </div>
+            </div>    
         </div>
     );
 }
