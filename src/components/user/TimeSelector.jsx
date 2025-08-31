@@ -59,7 +59,7 @@ export default function TimeSelector(){
 
     return (
       <div className="my-4">
-      <h3 className="text-lg font-semibold mb-2">Selecciona una hora:</h3>
+      <h2 className="text-lg font-semibold mb-2">Selecciona una hora:</h2>
       <div className="grid grid-cols-4 gap-2">
         {selectedService.schedules?.map((time) => {
           const isDisabled = !availableTimes.includes(time);
@@ -70,12 +70,12 @@ export default function TimeSelector(){
               key={time}
               onClick={() => handleTimeClick(time)}
               disabled={isDisabled}
-              className={`px-4 py-2 rounded border
+              className={`bg-white shadow rounded-lg p-2
                 ${isDisabled
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  ? "bg-gray-300 text-gray-500 font-bold cursor-not-allowed"
                   : isSelected
-                  ? "bg-blue-600 text-white"
-                  : "bg-white hover:bg-blue-100 border-blue-300"}`}
+                  ? "bg-blue-600 text-white font-bold"
+                  : "bg-white font-bold hover:bg-blue-100 border-blue-300"}`}
             >
               {time}{isDisabled && "(Lleno)"}
             </button>
