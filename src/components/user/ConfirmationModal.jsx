@@ -72,36 +72,62 @@ export default function ConfirmationModal({onConfirm, onCancel}){
 
     return (
         <div>
-            <div>
+            <div className="flex flex-col gap-6 p-4 sm:p-6  w-full max-w-md mx-auto">
                 {!confirmed ? (
                     <>
-                    <h2>Confirma la reserva</h2>
-                    <div>
-                        <p><strong>Servicio:</strong>{bookingData.service.name}</p>
-                        <p><strong>Fecha:</strong>{formatDate(bookingData.date)}</p>    
-                        <p><strong>Hora:</strong>{bookingData.time}</p>
-                        <p><strong>Nombre:</strong>{bookingData.fullName}</p>
-                        <p><strong>Email:</strong>{bookingData.email}</p>
-                        <p><strong>Teléfono:</strong>{bookingData.phone}</p>
-                    </div>
-                    <div>
-                        <button onClick={onCancel}>
-                            Volver
-                        </button>
+                    <h2 className="text-lg font-semibold">
+                        Confirma la reserva
+                    </h2>
 
+                    <div className="space-y-3 text-gray-700">
+                        <p>
+                            <span className="font-medium text-gray-900">Servicio: </span>
+                            {bookingData.service.name}
+                        </p>
+                    
+                        <p>
+                            <span className="font-medium text-gray-900">Fecha: </span>
+                            {formatDate(bookingData.date)}
+                        </p>    
+                        <p>
+                            <span className="font-medium text-gray-900">Hora: </span>
+                            {bookingData.time}
+                        </p>
+                        <p>
+                            <span className="font-medium text-gray-900">Nombre: </span>
+                            {bookingData.fullName}
+                        </p>
+                        <p>
+                            <span className="font-medium text-gray-900">Email: </span>
+                            {bookingData.email}
+                        </p>
+                        <p>
+                            <span className="font-medium text-gray-900">Teléfono: </span>
+                            {bookingData.phone}
+                        </p>
+                    </div>
+                    <div className="flex items-center">
                         <button
                             onClick={handleReservation}
+                            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition font-medium"
                         >
                             Confirmar reserva
-                        </button> 
+                        </button>
                     </div>
                     </>
                 ) : (
-                    <div>
-                        <h2>¡Reserva confirmada!</h2>
-                        <p>Te llegará un correo con los detalles</p>
+                    <div className="text-center space-y-4">
+                        <h2 className="text-2xl font-semibold text-green-600">
+                            ¡Reserva confirmada!
+                        </h2>
+                        <p className="text-gray-700">
+                            Te llegará un correo con los detalles.
+                        </p>
 
-                        <button onClick={onCancel}>
+                        <button 
+                            onClick={onCancel}
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition font-medium"
+                        >
                             Cerrar
                         </button>
                     </div>
