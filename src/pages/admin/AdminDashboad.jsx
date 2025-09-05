@@ -5,6 +5,7 @@ import { logout } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "../../components/admin/SearchInput";
 import { useBookingStore } from "../../store/bookingStore";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 const AdminDashboard = () => {
     const [bookings, setBookings] = useState([]);
@@ -56,36 +57,28 @@ const AdminDashboard = () => {
 
 
     return (
-        <div>
-            <h1>Panel de Administración</h1>
-            <button onClick={logout}>
-                Cerrar sesión
-            </button>
-             <button onClick={() => navigate("/admin/service")}>
-                    Servicios
-             </button>
-             <button onClick={() => navigate("/admin/userManagement")}>  
-                Gestión de Usuarios
-             </button>
-             <button onClick={() => window.location.reload(false)}>
-                Actualizar
-             </button>
-             <br />
-             <div>
-                <SearchInput />
-             </div>
-
+        <div className="flex min-h-screen bg-gray-200">
             
-          
+            <AdminSidebar />
 
-            {loading ? (
-                <p>Cargando reservas...</p>
-            ) : bookings.length === 0 ?(
-                <p>No hay reservas disponibles.</p>
-            ) : (
-               <ReservationList bookingData={filterData} onDelete={handleDelete} />
-            )
-        }
+            <main className="flex-1 flex-col ml-50">
+                <h1 className="text-4xl font-bold text-center p-10">Panel de Administración</h1>
+
+                <section className="p-6">
+                    <div className=" w-full max-w-7xl bg-white p-4 rounded shadow mb-6">
+                        <SearchInput />
+                    </div>
+        
+                    {loading ? (
+                            <p>Cargando reservas...</p>
+                        ) : bookings.length === 0 ?(
+                            <p>No hay reservas disponibles.</p>
+                        ) : (
+                        <ReservationList bookingData={filterData} onDelete={handleDelete} />
+                        )
+                    }
+                </section>
+            </main>    
         </div>
     )
 }

@@ -3,10 +3,12 @@ import { sendConfirmationEmail } from "../../utils/sendEmail";
 import {saveReservation} from "../../utils/saveReservation"
 import { useBookingStore } from "../../store/bookingStore";
 import { getBookingsForDateAndService } from "../../services/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function ConfirmationModal({onConfirm, onCancel}){
     const [confirmed, setConfirmed] = useState(false);
     const bookingData = useBookingStore((state) => state.bookingData);
+    const navigate = useNavigate();
 
     const handleConfirm = () => {
         setConfirmed(true);
@@ -57,9 +59,9 @@ export default function ConfirmationModal({onConfirm, onCancel}){
             alert("Reserva confirmada y correo enviado");
 
             //Recarga la página
-            setTimeout(() => {
+            /*setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 1000);*/
         }catch (error) {
         console.error("Error al enviar el email o guardar reserva:", error);
         alert(
@@ -125,7 +127,7 @@ export default function ConfirmationModal({onConfirm, onCancel}){
                         </p>
 
                         <button 
-                            onClick={onCancel}
+                            onClick={() => navigate("/home")}
                             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition font-medium"
                         >
                             Cerrar
