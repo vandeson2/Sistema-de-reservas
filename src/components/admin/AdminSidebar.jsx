@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom"
 import { logout } from "../../services/authService"
-import { header } from "framer-motion/client";
+import { useState } from "react";
 
-export default function AdminSidebar (){
+import { button, div } from "framer-motion/client";
+
+export default function AdminSidebar ({isOpen, setIsOpen}){
     const navigate = useNavigate();
 
     const handleLogout = async () =>{
@@ -15,42 +17,84 @@ export default function AdminSidebar (){
     };
 
     return (
-        <aside className="w-40 flex flex-col fixed justify-between top-0 left-0 h-full bg-black">
-            <div>
-                <div className="mb-10 border px-5  shadow">
-                    <h2 className="text-4xl font-bold text-center text-white">Logo </h2>
-                </div>
+        <>
+    
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
 
-                <nav className="flex flex-col">
-                    <Link
-                        className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                        onClick={() => window.location.reload(false)}
+            <aside className={`w-40 flex flex-col fixed justify-between top-0 left-0 h-full bg-black transform transition-transform duration-300 z-50
+                    ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
                     >
-                        Actualizar
-                    </Link>
-                    <Link
-                        to="/admin/userManagement"
-                        className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                    >
-                    Gestión de usuarios
-                    </Link>
+                <div>
+                    <div className="mb-10 border px-5  shadow">
+                        <h2 className="text-4xl font-bold text-center text-white">Logo </h2>
+                    </div>
 
-                    <Link
-                        to="service"
-                        className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                    >
-                        Gestión de servicios
-                    </Link>
-                    
-                </nav>
-            </div>    
+                    <nav className="flex flex-col">
+                        <Link
+                            to="/admin"
+                            className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                        >
+                        Inicio
+                        </Link>
+                        <Link
+                            className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                            onClick={() => window.location.reload(false)}
+                        >
+                            Actualizar
+                        </Link>
+                        <Link
+                            to="/admin/userManagement"
+                            className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                        >
+                        Gestión de usuarios
+                        </Link>
 
-                <button 
-                        onClick={handleLogout}
-                        className="text-center text-lg font-semibold mb-6 border shadow text-gray-200 hover:bg-blue-600 w-full"
-                    >
-                        Cerrar sesión 
-                </button>
-        </aside>
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                        >
+                            Servicios
+                        </button>
+                        {isOpen  && (
+                            <div className="flex flex-col">
+                                <Link 
+                                to="/admin/newService"
+                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                                >
+                                    Crear servicio
+                                </Link>
+
+                                <Link 
+                                to="/admin/times"
+                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                                >
+                                    Modificar horarios
+                                </Link>
+
+                                <Link 
+                                to="/admin/service"
+                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                                >
+                                    Servicios
+                                </Link>
+                            </div> 
+                        )}
+                        
+                    </nav>
+                </div>    
+
+                    <button 
+                            onClick={handleLogout}
+                            className="text-center text-lg font-semibold mb-6 border shadow text-gray-200 hover:bg-blue-600 w-full"
+                        >
+                            Cerrar sesión 
+                    </button>
+            </aside>
+        </>
     )
 }

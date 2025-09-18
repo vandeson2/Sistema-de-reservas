@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import SearchInput from "../../components/admin/SearchInput";
 import { useBookingStore } from "../../store/bookingStore";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { Menu, X } from "lucide-react"
 
 const AdminDashboard = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const { searchTerm} = useBookingStore();
-
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const navigate = useNavigate();
 
     //Cargar reservas 
@@ -59,24 +60,32 @@ const AdminDashboard = () => {
     return (
         <div className="flex min-h-screen bg-gray-200">
             
-            <AdminSidebar />
+            <AdminSidebar  isOpen={sidebarOpen} setIsOpen={setSidebarOpen}/>
 
-            <main className="flex-1 flex-col ml-50">
-                <h1 className="text-4xl font-bold text-center p-10">Panel de Administración</h1>
+            <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="md:hidden fixed top-4 left-4 z-50 p-2 rounded bg-black text-white"
+            >
+                {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
 
-                <section className="p-6">
+            <main className="flex-1 flex flex-col md:ml-50">
+                <h1 className="text-3xl md:text-4xl font-bold text-center p-6 md:p-10">Panel de Administración</h1>
+
+                <section className="p-2 md:p-6 flex flex-col gap-4">
                     <div className=" w-full max-w-7xl bg-white p-4 rounded shadow mb-6">
                         <SearchInput />
                     </div>
-        
-                    {loading ? (
-                            <p>Cargando reservas...</p>
-                        ) : bookings.length === 0 ?(
-                            <p>No hay reservas disponibles.</p>
-                        ) : (
-                        <ReservationList bookingData={filterData} onDelete={handleDelete} />
-                        )
-                    }
+                    <div className="overflow-x-auto">
+                        {loading ? (
+                                <p>Cargando reservas...</p>
+                            ) : bookings.length === 0 ?(
+                                <p>No hay reservas disponibles.</p>
+                            ) : (
+                            <ReservationList bookingData={filterData} onDelete={handleDelete} />
+                            )
+                        }
+                    </div>    
                 </section>
             </main>    
         </div>

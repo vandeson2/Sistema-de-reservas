@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, updateDoc, doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db, auth } from "../../firebase/config"
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { collection, getDocs, updateDoc, doc} from "firebase/firestore";
+import { db} from "../../firebase/config"
 import useAuthStore from "../../store/authStore"
 import  {deletedUser} from "../../services/authService"
 import { useNavigate } from "react-router-dom";
+import AdminSidebar from "./AdminSidebar";
+import { Menu, X } from "lucide-react"
+import CreateUser from "./CreateUser";
 
 export default function UserManagement(){
     const {user} = useAuthStore();
@@ -12,16 +14,9 @@ export default function UserManagement(){
 
     const [users, setUsers] = useState([]);
     const [loading, setLoading] =useState(true);
-
-    const navigate = useNavigate();
-
-    // campos para nuevos usuarios
-
-    const [newEmail, setNewEMail] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [newName, setNewName] = useState("");
-    const [newRole, setNewRole] = useState("user");
-
+    const [ sidebarOpen, setSidebarOpen ] = useState(false);
+    const [ showModal, setShowModal] = useState(false);
+    
     const fetchUser =  async() => {
         setLoading (true);
         const querySnapshot = await getDocs(collection(db, "users"));
@@ -39,43 +34,9 @@ export default function UserManagement(){
         await updateDoc(userRef, {role: newRole});
         fetchUser();
     }
-
-    //Crear usuario nuevo
-    const createUser = async (e) => {
-        e.preventDefault();
-        if(!newEmail || !newPassword || !newName){
-            return alert("Rellena todos los campos");
-        }
-
-        try{
-            const credential = await createUserWithEmailAndPassword(auth, newEmail, newPassword);
-            
-            //Guarda el nombre en el perfil del nuevo usuario
-            await updateProfile(credential.user, {displayName: newName});
-
-            await setDoc(doc(db, "users", credential.user.uid), {
-                displayName: newName,
-                email: newEmail,
-                password: newPassword,
-                role: newRole,
-                createdAt: serverTimestamp()
-
-            });
-
-            alert("Usuario creado correctamente");
-            setNewEMail("");
-            setNewPassword("");
-            setNewName("");
-            setNewRole("user");
-            fetchUser();
-        } catch (error){
-            console.log(error);
-            alert("Error al crear usuario");
-        }
-    };
+    
 
     // Eliminar usuario
-
     const handleDelete =  async (uid) => {
         if(!window.confirm("¿Seguro que quieres eleminar este usuario?"));
 
@@ -89,93 +50,94 @@ export default function UserManagement(){
         }
     };
 
-   useEffect(() => {
+useEffect(() => {
   if (role === "admin") {
     fetchUser();
   }
 }, [role]);
 
     
-    if (!user) return <p>Cargando usuario</p>
-    if(role !== "admin"){
-        return <p>No tiene permiso para gestionar usuarios.</p>
-    }
-    if(loading) return <p>Cargando usuarios...</p>
+    if (!user) return <p>Cargando usuario</p>;
+    if(role !== "admin") return <p>No tiene permiso para gestionar usuarios.</p>;
+    if(loading) return <p>Cargando usuarios...</p>;
 
 
     return (
-        <div>
-            <h2>Gestión de Usuarios</h2>
+        <div className=" flex min-h-screen bg-gray-200">
 
-            <form onSubmit={createUser}>
-                <input 
-                    type="text" 
-                    placeholder="Nombre"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                />
-                <input 
-                    type="email"
-                    placeholder="Correo"
-                    value={newEmail}
-                    onChange={(e) => setNewEMail(e.target.value)} 
-                />
-                <input 
-                    type="password" 
-                    placeholder="Contraseña"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                />
+            <AdminSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-                <select value={newRole} onChange={(e) => setNewRole(e.target.value)}>
-                    <option value="user">Usuario</option>
-                    <option value="admin">Admin</option>
-                </select>
-
-                    <button type="submit">Crear Usuario</button>
-            </form>
-            <button onClick={() => navigate("/admin")}>
-                Volver
+            <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="md:hidden fixed top-4 left-4 z-50 p-2 rounded bg-black text-white"
+            >
+                {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
-            {loading ? (
-                <p>Cargando usuarios...</p>
-            ):(
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Cambiar Rol</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.displayName || "Sin nombre"}</td>
-                                <td>{user.email}</td>
-                                <td>{user.role}</td>
-                                <td>
-                                    <button
-                                        onClick={() => changeRole(user.id, user.role === "admin" ? "user" : "admin")}>
-                                            Cambiar a {user.role === "admin" ? "Usuario" : "Admin"}
-                                    </button>
-                                </td>
-                                <td>
-                                    <button 
-                                        type="button"
-                                        onClick={() => handleDelete(user.id)}
-                                        >
-                                            Eliminar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="flex-1 flex flex-col p-5 md:ml-50 w-full max-w-7xl mx-auto">
+                <div className="bg-white min-h-auto p-2 rounded-2xl shadown">
+                <h2 className="text-3xl md:text-4xl font-bold text-center p-6 md:p-10">
+                    Gestión de Usuarios
+                </h2>
 
-            )}
+                <div className="flex justify-end mb-6">
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                    >
+                        Crear Usuario
+                    </button>
+
+                </div>
+                        <div className="overflow-x-auto w-full  mb-10">
+                            <table className="table-auto border-collapse rounded-lg  shadow min-w-full border text-xs sm:text-sm overflow-hidden">
+                                <thead className="border-b-2 bg-gray-100 text-gray-700 text-xs sm:text-sm uppercase">
+                                    <tr>
+                                        <th className="p-2 text-left">Nombre</th>
+                                        <th className="p-2 text-left hidden sm:table-cell">Email</th>
+                                        <th className="p-2 text-left">Rol</th>
+                                        <th className="p-2 text-left">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {users.map(user => (
+                                        <tr key={user.id} className="odd:bg-gray-50 hover:bg-gray-100 transition">
+                                            <td className="p-2">{user.displayName || "Sin nombre"}</td>
+                                            <td className="p-2 text-left hidden sm:table-cell">{user.email}</td>
+                                            <td className="p-2 text-left">
+                                                <span className={`px-2 py-1 rounded text-sm text-white
+                                                    ${user.role === "admin" ? "bg-green-500" : "bg-gray-500" }`}>
+                                                        {user.role}
+                                                </span>
+                                            </td>
+                                            <td className="p-2 text-left flex gap-2">
+                                                <button
+                                                    onClick={() => changeRole(user.id, user.role === "admin" ? "user" : "admin")}
+                                                    className="px-3 py-1 rounded text-sm text-white bg-blue-500 hover:bg-blue-700"
+                                                >
+                                                        Cambiar a {user.role === "admin" ? "Usuario" : "Admin"}
+                                                </button>
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => handleDelete(user.id)}
+                                                    className="px-3 py-1 rounded text-sm text-white bg-red-500 hover:bg-red-700"
+                                                    >
+                                                        Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>   
+                    {showModal && (
+                        <CreateUser 
+                                onClose={() => setShowModal(false)}
+                                onUserCreated={fetchUser}
+                        />
+                    )}    
+            </div>
         </div>
     );
 }
