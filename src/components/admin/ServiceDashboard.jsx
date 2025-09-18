@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useServiceStore } from "../../store/servicesStore";
+import { Menu, X} from "lucide-react"
+import AdminSidebar from "./AdminSidebar";
+
 
 
 const  ServcieDashboard = () => {
@@ -8,10 +10,10 @@ const  ServcieDashboard = () => {
     const {services, fetchServices, updateCapacity, deleteService} = useServiceStore();
     const [loading, setLoading] = useState(true);
     const [editedCapacity, setEditedCapacity] = useState({});
-    const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
-       const loadServices = async () => {
+    //Cargar servicios
+    const loadServices = async () => {
         console.log("Ejecutando fetchServices...");
 
         try{
@@ -22,26 +24,38 @@ const  ServcieDashboard = () => {
         }finally{
             setLoading(false);
         }
-       };
+    };
 
     //Eliminar servicio
     const handleDelete = async (id) => {
         if (window.confirm("¿Estás seguro de que quiere eliminar este servicio?")){
-            await deleteService(id);
+            try{
+                await deleteService(id);
+                loadServices();
+            }catch (error){
+               console.error("Error al eliminar servicio: ", error);
+               alert("Hubo un error al eliminar el servicio");
+            }
         }
     };  
 
-    //Actualizar capacidad
+    //Cambiar  capacidad
     const handleCapacityChange = (id, value) => {
         setEditedCapacity(prev => ({...prev, [id]: value}));
     };
 
+    //Actualizar capacidad
     const handleUpdateCapacity = async (id) => {
         const newCapacity = parseInt(editedCapacity[id]);
         if(!isNaN(newCapacity)){
-            await updateCapacity(id, newCapacity);
-            loadServices();
-            setEditedCapacity("");
+            try {
+                await updateCapacity(id, newCapacity);
+                setEditedCapacity(prev => ({...prev, [id] : ""}))
+                loadServices();
+            }catch (error){
+                console.error("Error al actualizar la capacidad: ", error );
+                alert("Hubo un error al actualizar la capacidad");
+            }    
         }
     };
 
@@ -50,49 +64,75 @@ const  ServcieDashboard = () => {
     }, []);
 
     return (
-        <div>
-           <h2>Gestión de Servicios</h2>
+        <div className="flex min-h-screen bg-gray-200">
 
-           <button onClick={() => navigate("/admin")}>Volvel al Panel</button>
-           <button onClick={() => navigate("/admin/newService")}>Crear nuevo servicio</button>
-           <button onClick={() => navigate("/admin/times")}>Gestionar horarios</button>
+            <AdminSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-           {loading ? (
-            <p>Cargando servicios...</p>
-           ) : services.length === 0 ?(
-            <p>No hay servicios disponibles.</p>
-           ) : (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Capacidad</th>
-                        <th>Cambiar capacidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {services.map(service => (
-                        <tr key={service.id}>
-                            <td>{service.name}</td>
-                            <td>{service.capacity}</td>
-                            <td>
-                                <input 
-                                    type="number"
-                                    value={editedCapacity[service.id] || ""}
-                                    placeholder="Nueva capacidad"
-                                    onChange={(e) => handleCapacityChange(service.id, e.target.value)}
-                                />
-                                <button onClick={() => handleUpdateCapacity(service.id)}>Actualizar</button>
-                            </td>
-                            <td>
-                                <button onClick={() => handleDelete(service.id)}>Eliminar</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-           )}
+            <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="md:hidden fixed top-4 left-4 z-50 p-2 rounded bg-black text-white"
+            >
+                {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            <div className="flex-1 flex flex-col p-4 md:p-6 md:ml-50 w-full max-w-7xl mx-auto">
+                <div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-center p-6 md:p-10">
+                        Gestión de Servicios
+                    </h2>
+                    {loading ? (
+                        <p>Cargando servicios...</p>
+                    ) : services.length === 0 ?(
+                        <p>No hay servicios disponibles.</p>
+                    ) : (
+                        <div className="overflow-x-auto w-full mb-10">
+                            <table className="table-auto border-collapse rounded-lg shadow min-w-full border text-xs sm:text-sm overflow-hidden">
+                                <thead className="border-b-2 bg-gray-100 text-gray-700 text-xs sm:text-sm uppercase">
+                                    <tr>
+                                        <th className="p-2 text-left">Nombre</th>
+                                        <th className="p-2 text-left">Capacidad</th>
+                                        <th className="p-2 text-left">Cambiar capacidad</th>
+                                        <th className="p-2 text-left">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {services.map(service => (
+                                        <tr key={service.id} className="odd:bg-gray-50 hover:bg-gray-100 transition">
+                                            <td className="p-2 text-left">{service.name}</td>
+                                            <td className="p-2 text-left">{service.capacity}</td>
+                                            <td className="p-2 text-left">
+                                                <div className="flex flex-col sm:flex-row gap-2">
+                                                    <input 
+                                                        type="number"
+                                                        value={editedCapacity[service.id] || ""}
+                                                        placeholder="Nueva capacidad"
+                                                        onChange={(e) => handleCapacityChange(service.id, e.target.value)}
+                                                        className="w-full md:w-24 border border-gray-500 rounded-md p-1 sm:p-2 mr-2"
+                                                    />
+                                                    <button 
+                                                        onClick={() => handleUpdateCapacity(service.id)}
+                                                        className="px-3 py-1 rounded text-sm text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    >
+                                                        Actualizar
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    onClick={() => handleDelete(service.id)}
+                                                    className="px-3 py-1 rounded text-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>    
+                    )}
+                </div>    
+            </div>
         </div>
     );
 };
