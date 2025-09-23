@@ -54,37 +54,12 @@ export default function AdminSidebar ({isOpen, setIsOpen}){
                         Gestión de usuarios
                         </Link>
 
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
+                        <Link 
+                        to="/admin/service"
+                        className="text-center text-lg font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
                         >
                             Servicios
-                        </button>
-                        {isOpen  && (
-                            <div className="flex flex-col">
-                                <Link 
-                                to="/admin/newService"
-                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                                >
-                                    Crear servicio
-                                </Link>
-
-                                <Link 
-                                to="/admin/times"
-                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                                >
-                                    Modificar horarios
-                                </Link>
-
-                                <Link 
-                                to="/admin/service"
-                                className="text-center text-sm font-semibold mb-2  text-gray-200 hover:bg-blue-600 w-full"
-                                >
-                                    Servicios
-                                </Link>
-                            </div> 
-                        )}
-                        
+                        </Link>                   
                     </nav>
                 </div>    
 
