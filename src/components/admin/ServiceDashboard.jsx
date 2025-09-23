@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useServiceStore } from "../../store/servicesStore";
 import { Menu, X} from "lucide-react"
 import AdminSidebar from "./AdminSidebar";
+import NewServiceModal from "./modals/NewServiceModal";
+import EditTimesModal from "./modals/EditTimesModal";
 
 
 
@@ -12,6 +14,10 @@ const  ServcieDashboard = () => {
     const [editedCapacity, setEditedCapacity] = useState({});
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
+    const [selectedService, setSelectedService] = useState(null);
+    const [isTimesModalOpen, setIsTimesModalOpen] = useState(false);
+    const [isOpenNewServiceModal, setIsOpenNewServiceModal] = useState(false);
     //Cargar servicios
     const loadServices = async () => {
         console.log("Ejecutando fetchServices...");
@@ -80,6 +86,26 @@ const  ServcieDashboard = () => {
                     <h2 className="text-3xl md:text-4xl font-bold text-center p-6 md:p-10">
                         Gestión de Servicios
                     </h2>
+                    <div className="flex justify-end mb-6 gap-2">
+                        <button
+                            onClick={() => 
+                            setIsOpenNewServiceModal(true)}
+                            className="px-4 py-2 rounded text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
+                            Nuevo Servicio
+                        </button>
+                        <button
+                            onClick={() => {
+                            setSelectedService(null)
+                            setIsTimesModalOpen(true)
+                            }}
+                              className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-700"
+                        >
+                            Editar Horarios
+                        </button>
+
+                       
+                    </div>
                     {loading ? (
                         <p>Cargando servicios...</p>
                     ) : services.length === 0 ?(
@@ -117,12 +143,21 @@ const  ServcieDashboard = () => {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="flex flex-col sm:flex-row gap-2 p-2">
                                                 <button 
                                                     onClick={() => handleDelete(service.id)}
                                                     className="px-3 py-1 rounded text-sm text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 >
                                                     Eliminar
+                                                </button>
+                                                <button
+                                                    onClick={() =>{
+                                                        setSelectedService(service);
+                                                        setIsTimesModalOpen(true);
+                                                    }}
+                                                    className="px-3 py-1 rounded text-sm text-white bg-indigo-500 hover:bg-indigo-700"
+                                                >
+                                                    Horarios
                                                 </button>
                                             </td>
                                         </tr>
@@ -133,6 +168,19 @@ const  ServcieDashboard = () => {
                     )}
                 </div>    
             </div>
+                <NewServiceModal
+                    isOpen={isOpenNewServiceModal}
+                    onClose={() => {
+                    setIsOpenNewServiceModal(false)
+                    loadServices()
+                    }}
+                />
+            
+            <EditTimesModal
+                isOpen={isTimesModalOpen}
+                onClose={() => setIsTimesModalOpen(false)}
+                service={selectedService}
+            />
         </div>
     );
 };

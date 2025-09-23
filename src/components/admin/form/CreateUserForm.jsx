@@ -3,7 +3,7 @@ import {
     createUserWithEmailAndPassword,
     updateProfile 
 } from "firebase/auth";
-import { db, auth } from"../../firebase/config"
+import { db, auth } from"../../../firebase/config"
 import { doc, serverTimestamp, setDoc } from"firebase/firestore"
 
 
@@ -52,11 +52,8 @@ export default function CreateUser({onClose, onUserCreated}){
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-                <h2 className="tetx-3xl md:text-4xl font-bold text-center p-6 md:p-10">
-                        Crear nuevo usuario
-                    </h2>
+        <div className="space-y-4">
+            <div className="">
                 <div  className="border p-6 gap-3 mb-5 bg-white">
                     <form onSubmit={createUser}
                     className="flex flex-col gap-2">

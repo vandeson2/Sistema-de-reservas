@@ -6,7 +6,7 @@ import  {deletedUser} from "../../services/authService"
 import { useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import { Menu, X } from "lucide-react"
-import CreateUser from "./CreateUser";
+import CreateUserModal from "./modals/CreateUserModal";
 
 export default function UserManagement(){
     const {user} = useAuthStore();
@@ -15,7 +15,7 @@ export default function UserManagement(){
     const [users, setUsers] = useState([]);
     const [loading, setLoading] =useState(true);
     const [ sidebarOpen, setSidebarOpen ] = useState(false);
-    const [ showModal, setShowModal] = useState(false);
+    const [ isOpenUserCreatedModal, setIsOpenUserCreatedModal] = useState(false);
     
     const fetchUser =  async() => {
         setLoading (true);
@@ -82,7 +82,7 @@ useEffect(() => {
 
                 <div className="flex justify-end mb-6">
                     <button
-                        onClick={() => setShowModal(true)}
+                        onClick={() => setIsOpenUserCreatedModal(true)}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                     >
                         Crear Usuario
@@ -131,12 +131,13 @@ useEffect(() => {
                             </table>
                         </div>
                      </div>   
-                    {showModal && (
-                        <CreateUser 
-                                onClose={() => setShowModal(false)}
-                                onUserCreated={fetchUser}
+                
+                        <CreateUserModal
+                                isOpen={isOpenUserCreatedModal}
+                                onClose={() => setIsOpenUserCreatedModal(false)}
+                                
                         />
-                    )}    
+            
             </div>
         </div>
     );
