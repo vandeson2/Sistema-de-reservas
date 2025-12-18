@@ -1,7 +1,11 @@
 import { useState } from "react";
 import {useNavigate} from "react-router-dom"; // redirecciona al usuario a otras rutas
 import { loginInWithEmail, getUserRole, signInWithGoogle } from "../services/authService";
-
+/*
+Componente de Autenticación.
+Gestriona el acceso de usuarios mediante credenciales tradicionales y GoogleAuth,
+realiza una redirección dinámica basada en el rol almacenado en la BBDD.
+*/
 export default function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

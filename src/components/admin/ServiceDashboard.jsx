@@ -6,7 +6,7 @@ import NewServiceModal from "./modals/NewServiceModal";
 import EditTimesModal from "./modals/EditTimesModal";
 
 
-
+//Panel principal para la gestión de la oferta de servicios
 const  ServcieDashboard = () => {
 
     const {services, fetchServices, updateCapacity, deleteService} = useServiceStore();
@@ -18,7 +18,8 @@ const  ServcieDashboard = () => {
     const [selectedService, setSelectedService] = useState(null);
     const [isTimesModalOpen, setIsTimesModalOpen] = useState(false);
     const [isOpenNewServiceModal, setIsOpenNewServiceModal] = useState(false);
-    //Cargar servicios
+    
+    //Cargar servicios de la BBDD
     const loadServices = async () => {
         console.log("Ejecutando fetchServices...");
 

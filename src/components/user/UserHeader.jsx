@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../services/authService"
 
-
+//Componente de navegación principal para la interfaz de usuario
 export default function UserHeader () {
     const navigate = useNavigate();
 
+    //Manejador de cierre de sesión
     const handleLogout = async () => {
         try {
             await logout();
@@ -15,6 +16,7 @@ export default function UserHeader () {
     };
 
     return (
+        
         <header className="w-full bg-black shadow-md border-b px-4 sm:px-6 py-3">
             <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-300">

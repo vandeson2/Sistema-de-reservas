@@ -4,11 +4,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore"
 import firebase from "firebase/compat/app";
 
-export const AuthContext = createContext(); // Crea contexto de autenticación
+// Crea contexto para la información del usuario autenticado.
+export const AuthContext = createContext();
 
-export const useAuth = () =>useContext(AuthContext); // Hook para acceder al contexto de autenticación
+// Hook para acceder al contexto de autenticación
+export const useAuth = () =>useContext(AuthContext); 
 
-// Proveedor de autenticación que envuelve la aplicación
+// Proveedor de autenticación que envuelve la aplicación para proveer el estado de la sesión y el rol del usuario.
 export const AuthProvider = ({children}) => {
    const [user, setUser] = useState(null);
    const [loading, setLoading] = useState(true);
@@ -20,11 +22,15 @@ export const AuthProvider = ({children}) => {
             //obtener el rol desde firestore
             const docRef = doc(db, "users", firebaseUser.uid);
             const docSnap = await getDoc(docRef);
-            let role = "user";
+            let role = "user";//rol por defecto
+
             if(docSnap.exists()){
+                //conviete en minúscula y quita espaciados
                 role = (docSnap.data().role || "user").toLowerCase().trim();
             }
+            
 
+            //Construcción de un objeto de usuario personaliza y limpio para la app
             const currentUser = {
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,

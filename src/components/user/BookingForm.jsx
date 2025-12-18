@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { useBookingStore } from "../../store/bookingStore";
 import { useAuth} from "../../context/AuthContext"
 
+//Esquema de validación de datos
 const validationSchema = Yup.object({
     fullName: Yup.string().required("El nombre es obligatorio"),
     email: Yup.string().email('El email no es válido').required("El email es obligatorio"),
@@ -11,6 +12,8 @@ const validationSchema = Yup.object({
         .required('El teléfono es obligatorio'),
 });
 
+
+//Formulario final de contacto
 export default function BookingForm(){
     const { user } = useAuth();
     const selectedService = useBookingStore ((state) => state.selectedService);

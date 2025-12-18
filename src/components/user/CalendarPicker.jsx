@@ -2,6 +2,8 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Estilos del calendario
 import  {useBookingStore} from "../../store/bookingStore"
 
+
+//Interfaz atractiva para selección de fechas. Utiliza react-calendar para la visualización y Zustand para persistir
 export default function CalendarPicker(){
     const selectedDate = useBookingStore((state) => state.selectedDate);
     const setSelectedDate = useBookingStore((state) => state.setSelectedDate);

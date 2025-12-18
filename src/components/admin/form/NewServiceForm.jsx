@@ -2,12 +2,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useServiceStore } from "../../../store/servicesStore";
 
-
+//Definición de las reglas de validación
 const validationSchema = Yup.object({
     name: Yup.string().required("El nombre es obligatorio"),
     capacity: Yup.number().min(1).required("La capacidad es obligatoria"),
 });
 
+//Formulario encargado de la creación de servicios.
 export default function NewServiceForm({onClose, onServiceCreated}) {
 
     const addService = useServiceStore ((state) => state.addService);

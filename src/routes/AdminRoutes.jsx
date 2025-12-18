@@ -3,7 +3,7 @@ import AdminHome from '../pages/admin/AdminHome'
 import Reservations from '../pages/admin/Reservations'
 import PrivateRoute from '../components/PrivateRoute'
 
-
+//// Componente encargado de definir el enrutamiento específico para la sección de administrador mediante react-router-dom.
 const AdminHome = () => (
     <Routes>
         <Route path="/admin"

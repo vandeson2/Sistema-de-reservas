@@ -8,7 +8,9 @@ import AdminSidebar from "./AdminSidebar";
 import { Menu, X } from "lucide-react"
 import CreateUserModal from "./modals/CreateUserModal";
 
+//Componente administrativo para la gestión de usuarios, roles y permiso. Accesible solo para "adim"
 export default function UserManagement(){
+    //AUTH & ROLES
     const {user} = useAuthStore();
     const role = user?.role;
 
@@ -17,6 +19,7 @@ export default function UserManagement(){
     const [ sidebarOpen, setSidebarOpen ] = useState(false);
     const [ isOpenUserCreatedModal, setIsOpenUserCreatedModal] = useState(false);
     
+    //Recupera la lista completa de usuarios desde Firestore
     const fetchUser =  async() => {
         setLoading (true);
         const querySnapshot = await getDocs(collection(db, "users"));
@@ -49,6 +52,7 @@ export default function UserManagement(){
             alert("Error al eliminar el usuario");
         }
     };
+
 
 useEffect(() => {
   if (role === "admin") {

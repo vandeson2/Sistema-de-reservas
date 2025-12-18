@@ -1,5 +1,7 @@
 import CreateUser from "../form/CreateUserForm";
 
+
+//Componente modal que encapsula la lógica de registro de nuevos usuarios.
 const CreateUserModal = ({isOpen, onClose, onUserCreated}) => {
     if(!isOpen) return null;
     return(

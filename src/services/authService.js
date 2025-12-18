@@ -10,7 +10,6 @@ import { doc, setDoc, getDoc, serverTimestamp, deleteDoc } from "firebase/firest
 import { db, auth, googleProvider } from "../firebase/config";
 
 //-----Registrar usuarios con  correo y contraseña y crear su doc en firestore
-
 export async function signInWithEmail (email, password, displayName = null){
     const credential = await createUserWithEmailAndPassword (auth, email, password);
     const user = credential.user;
@@ -36,7 +35,6 @@ export async function signInWithEmail (email, password, displayName = null){
 
 
 // ------Login con google 
-
 export async function signInWithGoogle(){
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
@@ -73,7 +71,6 @@ export async function deletedUser (uid){
 
 
 // ------Obtener rol de Firebase
-
 export async function getUserRole(uid){
     if(!uid) return null;
     const snap = await getDoc(doc(db, "users", uid));

@@ -15,7 +15,7 @@ export const deleteBookingById = async (id) =>{
     await deleteDoc(docRef);
 };
 
-//Consultas de reservas
+//Consultas de reservas por fecha y servicio
 export const getBookingsForDateAndService = async (date, serviceId) =>{
     const formattedDate = date instanceof Date
             ? date.toISOString().split("T")[0]

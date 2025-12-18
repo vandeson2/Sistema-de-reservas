@@ -3,6 +3,7 @@ import { useBookingStore } from "../../../store/bookingStore";
 import { useNavigate } from "react-router-dom";
 import { label } from "framer-motion/client";
 
+//Gestriona la disponibilidad horaria de los servicios.
 export default function AdminTimes ({service, onClose}) {
     const { 
         services, 

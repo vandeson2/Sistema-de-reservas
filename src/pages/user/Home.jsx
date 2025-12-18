@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
+//Página principal para usuarios autenticados. Ofrece acceso rápido a las funciones claves de la app.
 export default function Home(){
     const navigate = useNavigate();
     return (

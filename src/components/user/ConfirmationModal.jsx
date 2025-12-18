@@ -5,6 +5,11 @@ import { useBookingStore } from "../../store/bookingStore";
 import { getBookingsForDateAndService } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 
+/*
+Componente que actua como ultima barrera antes de confirma la reserva
+Verifica la disponibilidad para evitar "overbooking" en caso de que dos 
+usuarios intente reservar al mismo tiempo.
+ */
 export default function ConfirmationModal({onConfirm, onCancel}){
     const [confirmed, setConfirmed] = useState(false);
     const bookingData = useBookingStore((state) => state.bookingData);
@@ -15,9 +20,12 @@ export default function ConfirmationModal({onConfirm, onCancel}){
         onConfirm(bookingData)
     }
 
+    //Evita error de renderizado
     if (!bookingData){
         return null; // No hay datos de reserva para mostrar
     }
+
+    //formato de la fecha en (DD/MM/YYYY)
     const formatDate = (date) => {
         if (date instanceof Date){
             return (
@@ -29,10 +37,12 @@ export default function ConfirmationModal({onConfirm, onCancel}){
         return date;
     }
 
+    //1. Verifica la desponibilidad, 2. Envia email de confirmación, 3. Guarda en base de datos.
     const handleReservation = async () => {
         try{
             console.log("Verificando disponibilidad...");
 
+            //Verifica disponibilidad justo antes de guardar
             const existingBookings = await getBookingsForDateAndService(
                 bookingData.date,
                 bookingData.service.id

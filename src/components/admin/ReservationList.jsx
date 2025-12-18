@@ -1,4 +1,6 @@
 
+
+//Componente encargado de listar las reservas activas
 const ReservationList = ({ bookingData, onDelete}) => {
     const formatDate = (timestamp) =>{
             let dateObj;
@@ -14,7 +16,7 @@ const ReservationList = ({ bookingData, onDelete}) => {
     }
 
     return (
-        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gray-200">
             <table className="table-auto border-collapse w-full rounded-lg shadow text-sm overflow-hidden">
                 <thead className="border-b-2 bg-gray-100 text-gray-700 text-sm uppercase">
                     <tr>

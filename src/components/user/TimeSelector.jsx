@@ -1,11 +1,13 @@
-import { use } from "react";
 import { useBookingStore } from "../../store/bookingStore"; 
 import { useState, useEffect } from "react";
 import {getBookingsForDateAndService} from "../../services/firebase";
 
 
-
+/*Gestiona la disponibilidad de horarios en tiempo real.
+Cruza la información de las reservas existentes con la capacidad máxima del servicio 
+para deshabilitar horarios agotados*/
 export default function TimeSelector(){
+  //Acceso a Zustand -> guarda los datos elegidos
     const selectedDate = useBookingStore((state) => state.selectedDate);
     const selectedTime = useBookingStore((state) => state.selectedTime);
     const selectedService = useBookingStore((state) => state.selectedService);
@@ -15,6 +17,7 @@ export default function TimeSelector(){
     const [loading, setLoading] = useState(true);
     
 
+    // Carga datos de API al Montar el componente
     useEffect(() => {
         const fetchBookings = async () => {
       if (!selectedDate || !selectedService) return;
@@ -48,6 +51,7 @@ export default function TimeSelector(){
     fetchBookings();
   }, [selectedDate, selectedService, setSelectedTime]);
 
+  //Actualiza el estado global con la hora elegida
   const handleTimeClick = (time) => {
     setSelectedTime(time);
   };

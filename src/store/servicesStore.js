@@ -1,8 +1,12 @@
 import { create } from "zustand";
 import { createService, getServices, updateServiceCapacity, deleteServiceById} from"../services/service"
 
+
+//Gestión del catálogo de servicios
 export const useServiceStore = create((set) => ({
+    // Estado inicial
     services: [],
+
     //Cargando servicios desde firebase
     fetchServices: async ()=> {
         const data = await getServices();
@@ -10,6 +14,7 @@ export const useServiceStore = create((set) => ({
         return data
     },
 
+    // Actualiza la capacidad de un servicio en específico
     updateCapacity: async ( id, newCapacity) => {
         await updateServiceCapacity(id, newCapacity);
         set ((state) => ({
@@ -17,10 +22,14 @@ export const useServiceStore = create((set) => ({
             s.id === id? {...s, capacity:newCapacity} : s),
         }));
     },
+
+    //Crea un nuevo servicio y lo añade a la lista actual.
     addService: async (service) => {
         const newService = await createService(service);
         set ((state) => ({services: [...state.services, newService]}));
     },
+
+    //Elimina un servicio por ID
     deleteService:  async (id)  => {
         try{
             await deleteServiceById(id);

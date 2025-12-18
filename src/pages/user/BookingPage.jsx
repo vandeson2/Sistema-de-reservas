@@ -10,6 +10,7 @@ import { useState } from "react";
 import UserHeader from "../../components/user/UserHeader";
 import { div } from "framer-motion/client";
 
+//Define las animaciones de deslizamiento lateral.
 const variants = {
   enter: (direction) => ({
     x: direction > 0 ? 300 : -300,
@@ -22,22 +23,30 @@ const variants = {
   }),
 };
 
+// Componente del proceso de reservas. Gestiona un formulario multi-paso utilizando un estado global.
 const BookingPage = () =>{
+
+    //ESTADO GLOBAL(Zustand)
+    //Extraemos los datos de la reserva y la funciones para actualizar el store.
     const {selectedService, selectedDate, selectedTime, showConfirmation, toggleConfirmation, bookingData,
             setSelectedService, setSelectedDate, setSelectedTime
      } = useBookingStore();
 
+     //ESTADO LOCAL --- Controla el sentio de la animación
      const [direction, setDirection] = useState(1);
 
+     //Actualiza la dirección antes de cambiar de paso
      const goNext = () => setDirection(1);
      const goBack = () => setDirection(-1);
 
+    //Gestiona la confirmación de la reserva
     console.log("servicio seleccionado", selectedService);
     const handleConfirm = (bookingData) => {
         toggleConfirmation(false);
-    }
-       const handleCancel = () => {
-        console.log("Reserva cancelada");
+    };
+    //Gestiona la cancelación de la reserva
+    const handleCancel = () => {
+    console.log("Reserva cancelada");
         toggleConfirmation(false); // Cerrar modal
     };
     return (
@@ -55,6 +64,7 @@ const BookingPage = () =>{
                     </h2>
 
                     <AnimatePresence custom={direction} mode="wait">
+                        {/*1. Selección de servicio */}
                         {!selectedService && (
                         <motion.div
                             key="service"
@@ -75,6 +85,7 @@ const BookingPage = () =>{
                         </motion.div>
                         )}
 
+                        {/*2. Selección de fecha mediante Calendario */}
                         {selectedService && !selectedDate && (
                         <motion.div
                             key="calendar"
@@ -104,6 +115,7 @@ const BookingPage = () =>{
                         </motion.div>
                         )}
 
+                        {/*3. Selección de horario */}
                         {selectedService && selectedDate && !selectedTime && (
                         <motion.div
                             key="time"
@@ -139,6 +151,7 @@ const BookingPage = () =>{
                         </motion.div>
                         )}
 
+                        {/*4. Formulario de datos del cliente */}
                         {selectedService && selectedDate && selectedTime && !showConfirmation && (
                         <motion.div
                             key="form"
@@ -168,6 +181,7 @@ const BookingPage = () =>{
                         </motion.div>
                         )}
 
+                        {/*5. Confirmación final */}
                         {showConfirmation && (
                         <motion.div
                             key="confirmation"
@@ -194,7 +208,9 @@ const BookingPage = () =>{
                                 Atrás
                             </button>
                         </motion.div>
+                        
                         )}
+                    
                 </AnimatePresence>
                 </div>
             </div>

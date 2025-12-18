@@ -2,7 +2,7 @@ import { div } from "framer-motion/client";
 import AdminTimes from "../form/AdminTimes";
 
 
-
+//Componente modal que permite actualiza la disponibilidad.
 const EditTimesModal = ({ onClose, isOpen, service }) => {
     if (!isOpen) return null;
 

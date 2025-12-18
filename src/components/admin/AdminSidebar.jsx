@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { button, div } from "framer-motion/client";
 
+
+//Componente de navegación lateral para el panel de adiministración
 export default function AdminSidebar ({isOpen, setIsOpen}){
     const navigate = useNavigate();
 

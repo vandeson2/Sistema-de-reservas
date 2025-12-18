@@ -4,13 +4,16 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "./UserHeader";
 
-
+/*
+Componente que lista el historial de cits
+ */
 const MyReservation = () => {
     const  {user} = useAuth();
     const [reservation, setReservation] =useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
+    // Carga datos de la Api al montar el componente
     useEffect(() => {
         const fetchBooking = async () => {
             if (!user?.email) return;

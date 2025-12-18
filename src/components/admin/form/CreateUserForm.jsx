@@ -6,7 +6,7 @@ import {
 import { db, auth } from"../../../firebase/config"
 import { doc, serverTimestamp, setDoc } from"firebase/firestore"
 
-
+//Formulario encargado de gestionar el registro de nuevos usuarios
 export default function CreateUser({onClose, onUserCreated}){
     const [newEmail, setNewEMail] = useState("");
     const [newPassword, setNewPassword] = useState("");
