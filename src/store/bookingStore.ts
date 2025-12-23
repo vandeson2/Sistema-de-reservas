@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { BookingData, Service } from "../types/booking";
 import { getServices, updateServiceTimes } from "../services/service";
 import { getAllBookings,
          deleteBookingById,
@@ -6,7 +7,46 @@ import { getAllBookings,
          getBookingsByEmail
  } from "../services/firebase";
 
-export const useBookingStore = create((set, get) => ({
+
+//Interfaz para el estado y métodos del store de reservas
+interface BookingState {
+    //Estado del proceso de reserva
+    selectedService: Service | null;
+    selectedDate: Date | string | null;
+    selectedTime: string | null;
+    bookingData: BookingData | null;
+    showConfirmation: boolean;
+    searchTerm: string;
+    services: Service[];
+    bookings: any[];
+    loadingBookings: boolean;
+    errorBookings: any | null;
+
+    // Métodos para actualizar el estado
+    setSelectedService: (service: Service | null ) => void;
+    setSelectedDate: (date: Date | string | null) => void;
+    setSelectedTime: (time: string | null) => void;
+    setBookingData: (bookingData: BookingData | null) => void;
+    toggleConfirmation: (value: boolean) => void;
+    setSearchTerm: ( term: string) => void;
+
+    //Resetea el formulario de reservas
+    resetBooking: () => void;
+
+    //Métodos para servicios
+    fetchServices: () => Promise<void>;
+    updateServiceTimes: ( serviceId: string, schedules: any) => Promise<void>;
+
+    //Métodos para gestión de reservas
+    fetchAllBookings: () => Promise<void>;
+    deleteBookingById: (id: string) => Promise<void>;
+    fetchBookingsForDateAndService: ( date: string, serviceId: string) => Promise<any>;
+    fetchBookingsByEmail: ( email:string) => Promise<any>;
+
+
+ 
+} 
+export const useBookingStore = create<BookingState>((set, get) => ({
     //Estado inicial del proceso de reserva
      selectedService: null,
      selectedDate: null,
@@ -15,6 +55,9 @@ export const useBookingStore = create((set, get) => ({
      showConfirmation: false,
      searchTerm: "",
      services: [],
+     bookings: [],
+     loadingBookings: false,
+     errorBookings: null,
 
      //Métodos para actualizar estado
      setSelectedService: (service) => set({selectedService: service}),
@@ -23,11 +66,6 @@ export const useBookingStore = create((set, get) => ({
      setBookingData: (bookingData) => set({bookingData}),
      toggleConfirmation: (value) => set({ showConfirmation: value}),
      setSearchTerm: (term) => set({searchTerm: term}),
-
-     //Estados para reservas 
-     bookings: [],
-     loadingBookings: false,
-     errorBookings: null,
 
     //Limpia el formulario de reservar para permitir una nueva entrada de datos.     
      resetBooking: () => 
@@ -48,7 +86,7 @@ export const useBookingStore = create((set, get) => ({
         },
 
         //Actualiza los horarios de un servicio y sincroniza el estado local.
-        updateServiceTimes: async ( serviceId, schedules) => {
+        updateServiceTimes: async ( serviceId: string, schedules: any) => {
             await updateServiceTimes(serviceId, schedules);
             set((state) => ({
                 //Actualiza el servicio dentro del array de servicios
@@ -66,7 +104,7 @@ export const useBookingStore = create((set, get) => ({
         //Gestión de reservas
         fetchAllBookings: async () => {
             try{
-                set({loadingBookings:true});
+                set({loadingBookings: true});
                 const data = await getAllBookings();
                 set({bookings:data, loadingBookings: false});
             }catch (error){
@@ -75,7 +113,7 @@ export const useBookingStore = create((set, get) => ({
             }
         },
 
-        deleteBookingById: async (id) => {
+        deleteBookingById: async (id: string) => {
             try {
                 await deleteBookingById(id);
                 set((state) => ({
@@ -87,10 +125,10 @@ export const useBookingStore = create((set, get) => ({
         },
 
         // No actualizan el store directamente sino que actúan como puente hacia los servicios
-        fetchBookingsForDateAndService: async (date, serviceId) =>{
+        fetchBookingsForDateAndService: async (date: string, serviceId: string) =>{
             return await getBookingsForDateAndService(date, serviceId);
         },
-        fetchBookingsByEmail: async (email) => {
+        fetchBookingsByEmail: async (email: string) => {
             return await getBookingsByEmail(email);
         },
 
