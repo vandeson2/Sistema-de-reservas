@@ -1,6 +1,8 @@
 import { useBookingStore } from "../../store/bookingStore"; 
 import { useState, useEffect } from "react";
 import {getBookingsForDateAndService} from "../../services/firebase";
+import { BookingData } from "../../types/booking";
+
 
 
 /*Gestiona la disponibilidad de horarios en tiempo real.
@@ -13,8 +15,8 @@ export default function TimeSelector(){
     const selectedService = useBookingStore((state) => state.selectedService);
     const setSelectedTime = useBookingStore((state) => state.setSelectedTime);
 
-    const [availableTimes, setAvailableTimes] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     
 
     // Carga datos de API al Montar el componente
@@ -22,12 +24,13 @@ export default function TimeSelector(){
         const fetchBookings = async () => {
       if (!selectedDate || !selectedService) return;
 
+      setLoading(true);
       try {
         //Obtener reservas para esa fecha y servicio
-        const bookings = await getBookingsForDateAndService(selectedDate, selectedService.id);
+        const bookings: BookingData[] = await getBookingsForDateAndService(selectedDate, selectedService.id);
 
-        //Contar reservas por hora
-        const timeCount = {};
+        //Contar reservas por hora: Record<hora, cantidad>
+        const timeCount: Record<string, number> = {};
         bookings.forEach((booking) => {
             const hours = booking.time;
           timeCount[hours] = (timeCount[hours] || 0) + 1;
@@ -37,22 +40,25 @@ export default function TimeSelector(){
         const serviceTimes = selectedService.schedules || [];
 
         //Filtrar horas disponibles (máx. 2 reservas por hora)
-        const filtered = serviceTimes.filter((time) => (timeCount[time] || 0) < selectedService?.capacity);
-        
+        const filtered = serviceTimes.filter((time) => {
+          const occupiedSlot =  timeCount[time] || 0;
+          return occupiedSlot  < selectedService?.capacity;
+      });
+
         setAvailableTimes(filtered);
         setSelectedTime(null); // Reiniciar selección
       } catch (error) {
         console.error("Error al cargar reservas:", error);
         setAvailableTimes(selectedService.schedules || []); // Fallback
-      }
+      }finally{}
       setLoading(false)
-    };
+      };
 
     fetchBookings();
   }, [selectedDate, selectedService, setSelectedTime]);
 
   //Actualiza el estado global con la hora elegida
-  const handleTimeClick = (time) => {
+  const handleTimeClick = (time: string) => {
     setSelectedTime(time);
   };
 

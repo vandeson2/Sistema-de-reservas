@@ -1,6 +1,7 @@
 import { getServices } from "../../services/service";
 import {useBookingStore} from "../../store/bookingStore"
 import { useState, useEffect } from "react";
+import { Service } from "../../types/booking";
 
 /*
 Componente de entrada para el flujo de reservas.
@@ -11,8 +12,8 @@ export default function ServiceSelector(){
     const setSelectedService = useBookingStore ((state) => state.setSelectedService);
     
     
-    const [services, setServices] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
    // Ejecuta la carga inicial de datos al montar el componente. 
     useEffect (() => {

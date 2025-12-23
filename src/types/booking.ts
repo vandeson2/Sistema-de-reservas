@@ -1,7 +1,7 @@
 export interface Service {
     id: string;
     name: string;
-    schedules?: any;
+    schedules?: string[];
     capacity: number;
 
 }
