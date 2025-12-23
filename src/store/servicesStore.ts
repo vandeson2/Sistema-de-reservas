@@ -1,9 +1,17 @@
 import { create } from "zustand";
+import { Service } from "../types/booking";
 import { createService, getServices, updateServiceCapacity, deleteServiceById} from"../services/service"
 
+interface ServiceState {
+    services: Service[];
+    fetchServices: () => Promise<Service[]>;
+    updateCapacity: (id: string, newCapacity: number) => Promise<void>;
+    addService: (service : Omit<Service, "id">) => Promise<void>;
+    deleteService: (id: string) => Promise<void>;
+}
 
 //Gestión del catálogo de servicios
-export const useServiceStore = create((set) => ({
+export const useServiceStore = create<ServiceState>((set) => ({
     // Estado inicial
     services: [],
 

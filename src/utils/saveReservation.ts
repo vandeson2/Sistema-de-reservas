@@ -1,8 +1,9 @@
 import {db} from "../firebase/config";
 import { addDoc, collection }  from "firebase/firestore";
+import { BookingData } from "../types/booking.ts";
 
 
-export  const saveReservation = async (bookingData) =>{
+export  const saveReservation = async (bookingData: BookingData): Promise<string> =>{
  try {
     // Formatear la fecha como string 'YYYY-MM-DD'
     const formattedDate = bookingData.date instanceof Date
@@ -18,8 +19,8 @@ export  const saveReservation = async (bookingData) =>{
       phone: bookingData.phone,
       date: formattedDate,
       time: bookingData.time,
-      serviceId: bookingData.service?.id,
-      serviceName:bookingData.service?.name,
+      serviceId: bookingData.service?.id || "no-Id",
+      serviceName:bookingData.service?.name || "no-name",
     };
 
     const docRef = await addDoc(collection(db, "reservas"), cleanData);
