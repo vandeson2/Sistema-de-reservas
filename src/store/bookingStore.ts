@@ -5,7 +5,7 @@ import { getAllBookings,
          deleteBookingById,
          getBookingsForDateAndService,
          getBookingsByEmail
- } from "../services/firebase";
+ } from "../services/firebase"
 
 
 //Interfaz para el estado y métodos del store de reservas

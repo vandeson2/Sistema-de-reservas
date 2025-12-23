@@ -4,7 +4,7 @@ import { createService, getServices, updateServiceCapacity, deleteServiceById} f
 
 interface ServiceState {
     services: Service[];
-    fetchServices: () => Promise<void>;
+    fetchServices: () => Promise<Service[]>;
     updateCapacity: (id: string, newCapacity: number) => Promise<void>;
     addService: (service : Omit<Service, "id">) => Promise<void>;
     deleteService: (id: string) => Promise<void>;
