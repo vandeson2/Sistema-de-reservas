@@ -1,23 +1,34 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useServiceStore } from "../../../store/servicesStore";
 
+interface FormValues {
+    name: string;
+    capacity: number;
+}    
 //Definición de las reglas de validación
 const validationSchema = Yup.object({
     name: Yup.string().required("El nombre es obligatorio"),
     capacity: Yup.number().min(1).required("La capacidad es obligatoria"),
 });
 
+interface NewServiceFormProps {
+    onClose: () => void;
+    onServiceCreated: () => void;
+}
+
 //Formulario encargado de la creación de servicios.
-export default function NewServiceForm({onClose, onServiceCreated}) {
+export default function NewServiceForm({onClose, onServiceCreated}: NewServiceFormProps) {
 
     const addService = useServiceStore ((state) => state.addService);
 
-    const handleSubmit = async (values, {resetForm, setSubmitting}) => {
+    const handleSubmit = async (values: FormValues, {resetForm, setSubmitting}: FormikHelpers<FormValues>) => {
         try{
             await addService(values);
             alert ("Servicio creado correctamente");
             resetForm();
+            onServiceCreated();
+            onClose();
         }catch (error){
             console.error(error);
             alert(" Error al crear el servicio");

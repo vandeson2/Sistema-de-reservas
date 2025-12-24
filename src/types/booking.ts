@@ -7,6 +7,7 @@ export interface Service {
 }
 
 export interface BookingData  {
+    id?: string;
     fullName: string;
     email: string;
     phone: string;

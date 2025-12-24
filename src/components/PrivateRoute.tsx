@@ -1,16 +1,23 @@
 import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
-import { useContext} from "react"
+import React, { useContext} from "react"
 
-
+interface PrivateRouteProps {
+    children: React.ReactNode;
+    allowedRoles?: string[];
+}
 //Componente de envoltura para proteger las rutas sensibles.
 //verifica la autenticación del usuario como sus permisos antes de permitir el acceso al contenido
-export default function PrivateRoute ({ children, allowedRoles}){
+export default function PrivateRoute ({ children, allowedRoles}: PrivateRouteProps) {
     //Consuminos el estado de autenticación global
-    const { user, loading } = useContext(AuthContext);
+    const context = useContext(AuthContext);
+    if (!context) {
+    throw new Error("PrivateRoute debe usarse dentro de un AuthProvider");
+  }
+    const { user, loading } = context;
 
     //Estado de carga
-    if(loading || (user && !user.role)) return <p>Cargando...</p>;
+    if(loading || (user && !user.role)) return <p>Verificando acceso...</p>;
 
     //1. Usuario  no autenticado
     if(!user){
@@ -31,7 +38,7 @@ export default function PrivateRoute ({ children, allowedRoles}){
 
     console.log("PrivateRoute:", {user, allowedRoles});
   //2. usuarios autenticados pero sin rol autorizado
-    if(allowedRoles && !normalizedAllowed.includes(userRole)){
+    if(allowedRoles && !normalizedAllowed?.includes(userRole)){
         console.warn(`Acceso denegado por rol: ${user.role}`);
         //Redirigir según el rol
         if(user.role === "admin"){

@@ -47,7 +47,7 @@ export const updateServiceCapacity = async (id: string, newCapacity: number): Pr
 }
 
 // Actualizar horarios en un servicio
-export const updateServiceTimes = async (id: string, schedules: any): Promise<void> => {
+export const updateServiceTimes = async (id: string, schedules: string[]): Promise<void> => {
     const docRef = doc (db, "services", id);
     await updateDoc(docRef, {schedules});
 }

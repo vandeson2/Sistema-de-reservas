@@ -1,8 +1,13 @@
 import { div } from "framer-motion/client";
 import NewServiceForm from "../form/NewServiceForm";
 
+interface NewServiceProps{
+    isOpen: boolean;
+    onClose: () => void;
+    onServiceCreated: () => void;
+}
 //Componente que encapsula el formulario de creación de servicios y gestiona el cierre del mismo.
-const NewServiceModal = ({isOpen, onClose, onServiceCreated}) => {
+const NewServiceModal = ({isOpen, onClose, onServiceCreated}: NewServiceProps) => {
     if(!isOpen) return null;
     
     return(

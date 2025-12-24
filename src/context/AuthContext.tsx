@@ -1,18 +1,30 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore"
 import firebase from "firebase/compat/app";
 
+interface AuthUser {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    role: string;
+}
+
+interface AuthContextType {
+    user: AuthUser | null;
+    loading: boolean;
+}
+
 // Crea contexto para la información del usuario autenticado.
-export const AuthContext = createContext();
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Hook para acceder al contexto de autenticación
 export const useAuth = () =>useContext(AuthContext); 
 
 // Proveedor de autenticación que envuelve la aplicación para proveer el estado de la sesión y el rol del usuario.
-export const AuthProvider = ({children}) => {
-   const [user, setUser] = useState(null);
+export const AuthProvider = ({children}: {children: React.ReactNode}) => {
+   const [user, setUser] = useState<AuthUser | null>(null);
    const [loading, setLoading] = useState(true);
 
     // Efecto para escuchar cambios en el estado de autenticación
@@ -31,7 +43,7 @@ export const AuthProvider = ({children}) => {
             
 
             //Construcción de un objeto de usuario personaliza y limpio para la app
-            const currentUser = {
+            const currentUser: AuthUser = {
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,
                 displayName: firebaseUser.displayName,

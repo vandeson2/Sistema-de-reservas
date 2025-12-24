@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { 
     createUserWithEmailAndPassword,
     updateProfile 
@@ -6,15 +6,20 @@ import {
 import { db, auth } from"../../../firebase/config"
 import { doc, serverTimestamp, setDoc } from"firebase/firestore"
 
+interface CreateUserProps {
+    onClose: () => void;
+    onUserCreated: () => void;
+}
+
 //Formulario encargado de gestionar el registro de nuevos usuarios
-export default function CreateUser({onClose, onUserCreated}){
+export default function CreateUser({onClose, onUserCreated}: CreateUserProps){
     const [newEmail, setNewEMail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newName, setNewName] = useState("");
     const [newRole, setNewRole] = useState("user");
     const [loading, setLoading] = useState(false);
 
-    const createUser = async (e) => {
+    const createUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(!newEmail || !newPassword || !newName){
             return alert("Rellena todos los campos");

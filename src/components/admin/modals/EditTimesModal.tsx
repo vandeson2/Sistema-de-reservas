@@ -1,9 +1,14 @@
-import { div } from "framer-motion/client";
+
 import AdminTimes from "../form/AdminTimes";
+import { Service } from "../../../types/booking";
 
-
+interface EditTimesProps {
+    isOpen: boolean;
+    onClose: () => void;
+    service: Service | null;
+}
 //Componente modal que permite actualiza la disponibilidad.
-const EditTimesModal = ({ onClose, isOpen, service }) => {
+const EditTimesModal = ({ onClose, isOpen, service }: EditTimesProps) => {
     if (!isOpen) return null;
 
     return (

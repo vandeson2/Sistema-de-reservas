@@ -1,17 +1,28 @@
+import { BookingData} from "../../types/booking";
 
+interface ReservationListProps{
+    bookingData: BookingData[];
+    onDelete: (id: string) => Promise<void>;
+}
 
 //Componente encargado de listar las reservas activas
-const ReservationList = ({ bookingData, onDelete}) => {
-    const formatDate = (timestamp) =>{
+const ReservationList = ({ bookingData, onDelete}: ReservationListProps) => {
+    const formatDate = (timestamp: any) : string =>{
             let dateObj;
             if (timestamp?.seconds) {
                 dateObj = new Date(timestamp.seconds * 1000);
-            } else {
+            } else if( timestamp instanceof Date){
+                dateObj = timestamp
+            }else {
                 dateObj = new Date(timestamp);
             }
+              
+            if (isNaN(dateObj.getTime())) return "Fecha inválida";
+
             const day = String(dateObj.getDate()).padStart(2, '0');
             const month = String(dateObj.getMonth() + 1).padStart(2, '0');
             const year = dateObj.getFullYear();
+
             return `${day}/${month}/${year}`;
     }
 
@@ -40,7 +51,7 @@ const ReservationList = ({ bookingData, onDelete}) => {
                             <td className="p-2 text-left">{resultado.time}</td>
                             <td>
                             <button
-                                    onClick={() => onDelete(resultado.id)}
+                                    onClick={() => resultado.id && onDelete(resultado.id)}
                                     className="btn borde bg-red-500 text-white  hover:bg-red-600 w-full md:w-auto"
                                 >
                                     Cancelar
@@ -50,7 +61,7 @@ const ReservationList = ({ bookingData, onDelete}) => {
                        ))
                     ):(
                         <tr>
-                            <td colSpan="6">
+                            <td colSpan={6}>
                                 No hay reservas registradas
                             </td>
                         </tr>
