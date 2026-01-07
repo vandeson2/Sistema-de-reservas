@@ -6,7 +6,7 @@ export default function UserHeader () {
     const navigate = useNavigate();
 
     //Manejador de cierre de sesión
-    const handleLogout = async () => {
+    const handleLogout = async (): Promise<void>=> {
         try {
             await logout();
             navigate("/");

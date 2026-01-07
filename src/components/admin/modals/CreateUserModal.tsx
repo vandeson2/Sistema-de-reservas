@@ -1,8 +1,12 @@
 import CreateUser from "../form/CreateUserForm";
 
-
+interface CreateUserProps{
+    isOpen: boolean;
+    onClose: () => void;
+    onUserCreated: () => void;
+}
 //Componente modal que encapsula la lógica de registro de nuevos usuarios.
-const CreateUserModal = ({isOpen, onClose, onUserCreated}) => {
+const CreateUserModal = ({isOpen, onClose, onUserCreated}: CreateUserProps) => {
     if(!isOpen) return null;
     return(
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">

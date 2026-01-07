@@ -4,20 +4,20 @@ import { Menu, X} from "lucide-react"
 import AdminSidebar from "./AdminSidebar";
 import NewServiceModal from "./modals/NewServiceModal";
 import EditTimesModal from "./modals/EditTimesModal";
-
+import { Service } from "../../types/booking";
 
 //Panel principal para la gestión de la oferta de servicios
 const  ServcieDashboard = () => {
 
     const {services, fetchServices, updateCapacity, deleteService} = useServiceStore();
-    const [loading, setLoading] = useState(true);
-    const [editedCapacity, setEditedCapacity] = useState({});
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [editedCapacity, setEditedCapacity] = useState<Record<string, string>>({});
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
 
-    const [selectedService, setSelectedService] = useState(null);
-    const [isTimesModalOpen, setIsTimesModalOpen] = useState(false);
-    const [isOpenNewServiceModal, setIsOpenNewServiceModal] = useState(false);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
+    const [isTimesModalOpen, setIsTimesModalOpen] = useState<boolean>(false);
+    const [isOpenNewServiceModal, setIsOpenNewServiceModal] = useState<boolean>(false);
     
     //Cargar servicios de la BBDD
     const loadServices = async () => {
@@ -34,7 +34,7 @@ const  ServcieDashboard = () => {
     };
 
     //Eliminar servicio
-    const handleDelete = async (id) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm("¿Estás seguro de que quiere eliminar este servicio?")){
             try{
                 await deleteService(id);
@@ -47,12 +47,12 @@ const  ServcieDashboard = () => {
     };  
 
     //Cambiar  capacidad
-    const handleCapacityChange = (id, value) => {
+    const handleCapacityChange = (id: string, value:  string) => {
         setEditedCapacity(prev => ({...prev, [id]: value}));
     };
 
     //Actualizar capacidad
-    const handleUpdateCapacity = async (id) => {
+    const handleUpdateCapacity = async (id: string) => {
         const newCapacity = parseInt(editedCapacity[id]);
         if(!isNaN(newCapacity)){
             try {

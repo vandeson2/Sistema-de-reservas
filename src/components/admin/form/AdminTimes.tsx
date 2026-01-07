@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import { useBookingStore } from "../../../store/bookingStore";
 import { useNavigate } from "react-router-dom";
 import { label } from "framer-motion/client";
+import { Service } from "../../../types/booking";
 
+interface AdminTimesProps {
+    service: Service | null;
+    onClose: () => void;
+}
 //Gestriona la disponibilidad horaria de los servicios.
-export default function AdminTimes ({service, onClose}) {
+export default function AdminTimes ({service, onClose}: AdminTimesProps) {
     const { 
         services, 
         selectedService,
@@ -26,7 +31,7 @@ export default function AdminTimes ({service, onClose}) {
         fetchServices();
         setSelectedService(service);
         }
-    }, [service, setSelectedService])
+    }, [service, setSelectedService, fetchServices])
 
     // Añadir horario
     const handleAddSchedules = async () => {
@@ -38,10 +43,10 @@ export default function AdminTimes ({service, onClose}) {
     };
 
     // Eliminar horarios
-    const handleDeleteSchedules = async (schedules) => {
+    const handleDeleteSchedules = async (schedules: string) => {
         if (!selectedService) return;
 
-        const updateSchedules = selectedService.schedules.filter((hours) => hours !== schedules);
+        const updateSchedules = (selectedService.schedules || []).filter((hours) => hours !== schedules);
         await updateServiceTimes(selectedService.id, updateSchedules);
     };
     
@@ -59,8 +64,8 @@ export default function AdminTimes ({service, onClose}) {
                     value={selectedService?.id || ""}
                     className="w-full md:w-1/3 p-2 border border-gray-300 rounded-lg text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus-ring-blue-500 transition"
                     onChange={(e) => {
-                        const service = services.find((serv) => serv.id === e.target.value);
-                        setSelectedService(service);
+                        const found = services.find((serv) => serv.id === e.target.value);
+                        setSelectedService(found || null);
                     }}
                 >
                     <option value="">--Seleccionar--</option>
@@ -78,7 +83,7 @@ export default function AdminTimes ({service, onClose}) {
 
             {selectedService && (
                 <div> 
-                    {selectedService.schedules?.length > 0 ? (
+                    {selectedService.schedules && selectedService.schedules.length > 0 ? (
                     <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200  bg-whit shandow-sm max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 mb-2 md:mb-4 ">
                       {selectedService.schedules?.map((hours) => (
                          <li key={hours} className="flex justify-between items-center border p-2 rounded px-4 py-3 bg-gray-50 transition-colors">

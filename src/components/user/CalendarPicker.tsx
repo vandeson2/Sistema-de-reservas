@@ -1,15 +1,20 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Estilos del calendario
-import  {useBookingStore} from "../../store/bookingStore"
+import  {useBookingStore} from "../../store/bookingStore";
 
+
+type CalendarValue = Date | null | [Date | null, Date | null];
 
 //Interfaz atractiva para selección de fechas. Utiliza react-calendar para la visualización y Zustand para persistir
 export default function CalendarPicker(){
     const selectedDate = useBookingStore((state) => state.selectedDate);
     const setSelectedDate = useBookingStore((state) => state.setSelectedDate);
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date); //guarda la fecha en el estado
+    const handleDateChange = (value: CalendarValue) => {
+        const date = Array.isArray(value) ? value[0] : value;
+        if (date instanceof Date){
+            setSelectedDate(date); //guarda la fecha en el estado
+        }
     };
 
 
@@ -29,7 +34,7 @@ export default function CalendarPicker(){
                 />
             </div>
 
-            {selectedDate && (
+            {selectedDate instanceof Date && (
                 <p className="">
                     Has seleccionado: {" "}
                     <span className="font-semibold">

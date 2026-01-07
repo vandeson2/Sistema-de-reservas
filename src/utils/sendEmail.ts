@@ -1,8 +1,9 @@
 import emailjs from '@emailjs/browser';
+import { BookingData } from '../types/booking';
 
-export const sendConfirmationEmail = async (bookingData) => {
+export const sendConfirmationEmail = async (bookingData: BookingData) => {
 
-    const formatDate = (date) => {
+    const formatDate = (date: Date | string) => {
         if (date instanceof Date) {
             return (
                 `${date.getDate().toString().padStart(2, '0')}/` +
@@ -15,7 +16,7 @@ export const sendConfirmationEmail = async (bookingData) => {
     const templateParams = {
         user_name: bookingData.fullName,
         email: bookingData.email,
-        service: bookingData.service.name,
+        service: typeof bookingData.service === 'object' ? bookingData.service.name : bookingData.service,
         date: formatDate(bookingData.date),
         time: bookingData.time || 'N/A',
     };
